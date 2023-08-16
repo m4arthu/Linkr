@@ -19,7 +19,7 @@ export const AuthProvider = ({children}) => {
     
     const register = (name,email,password,pictureUrl) => { 
         
-        axios.post(process.env.REACT_APP_API_URL + "/login",
+        axios.post(process.env.REACT_APP_API_URL + "/register",
         {name,email,password,pictureUrl }).then(()=>{
             navigate("/")
          }).catch((e)=>{

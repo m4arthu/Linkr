@@ -4,13 +4,13 @@ export default function NavBar() {
     return(
         <ContainerGeral>
             <h1>linkr</h1>
-            <div className="search">
+            {/* <div className="search">
                 <input placeholder="Search for people"/>
                 <ion-icon name="search"></ion-icon>
-            </div>
+            </div> */}
             <div className="user">
                 <ion-icon name="chevron-down-outline"></ion-icon>
-                <img src="https://cbissn.ibict.br/images/phocagallery/galeria2/thumbs/phoca_thumb_l_image03_grd.png" />
+                <img src="https://cbissn.ibict.br/images/phocagallery/galeria2/thumbs/phoca_thumb_l_image03_grd.png" alt='ImagemPerfil' />
             </div>
         </ContainerGeral>
     )

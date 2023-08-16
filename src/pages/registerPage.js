@@ -1,15 +1,27 @@
+import { useContext, useRef } from "react"
 import { SloganComponent } from "../components/slogan.component"
 import { Container, LoginFormContainer } from "../styledcomponents/style"
 import {Link} from "react-router-dom"
+import { authContext } from "../contexts/authContext.js"
 export const RegisterPage = () => {
+   const name = useRef(null);
+   const email = useRef(null);
+   const password = useRef(null);
+   const picture = useRef(null);
+   const {register} = useContext(authContext)
+
+   const sendRegister = (e) => {
+         e.preventDefault()
+         register(name.current.value, email.current.value, password.current.value, picture.current.value)
+   }
     return (
         <Container>
             <SloganComponent />
-            <LoginFormContainer color="#333333">
-                <input type="text" placeholder="e-mail" />
-                <input type="password" placeholder="Password" />
-                <input type="text" placeholder="username" />
-                <input type="text" placeholder="picture url" />
+            <LoginFormContainer onSubmit={sendRegister} color="#333333">
+                <input type="text" ref={email} placeholder="e-mail" />
+                <input type="password" ref={password} placeholder="Password" />
+                <input type="text" ref={name} placeholder="username" />
+                <input type="text" ref={picture} placeholder="picture url" />
                 <button>Log In</button>
                 <Link to={"/"}>Switch back to log in</Link>
             </LoginFormContainer>

@@ -6,23 +6,28 @@ export const authContext  = createContext()
 
 export const AuthProvider = ({children}) => {
     const navigate = useNavigate()
-    const login = (email,password) => { 
+    const login = (email,password,setButtonState) => { 
     
         axios.post(process.env.REACT_APP_API_URL + "/login",
          { email: email, password: password}).then((r)=>{
              localStorage.setItem("token",r.data.token);
+             localStorage.setItem("userData",r.data.userData)
+             setButtonState(false)
              navigate("/timeline")
             }).catch((e)=>{
+                setButtonState(false)
             alert(e.response.data)
         })
     }
     
-    const register = (name,email,password,pictureUrl) => { 
+    const register = (name,email,password,pictureUrl,setButtonState) => { 
         
         axios.post(process.env.REACT_APP_API_URL + "/register",
         {name,email,password,pictureUrl }).then(()=>{
+            setButtonState(false)
             navigate("/")
          }).catch((e)=>{
+            setButtonState(false)
             alert(e.response.data)
          })
     }

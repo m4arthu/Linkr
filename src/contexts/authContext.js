@@ -6,6 +6,7 @@ export const authContext  = createContext()
 
 export const AuthProvider = ({children}) => {
     const navigate = useNavigate()
+
     const login = (email,password) => { 
     
         axios.post(process.env.REACT_APP_API_URL + "/login",
@@ -18,7 +19,6 @@ export const AuthProvider = ({children}) => {
     }
     
     const register = (name,email,password,pictureUrl) => { 
-        
         axios.post(process.env.REACT_APP_API_URL + "/login",
         {name,email,password,pictureUrl }).then(()=>{
             navigate("/")

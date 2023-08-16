@@ -3,10 +3,14 @@ import { useNavigate } from "react-router-dom"
 import { styled } from "styled-components"
 
 export default function NavBar() {
-
+    
+    const data = JSON.parse(localStorage.getItem("userData"));
     let [click, setClick] = useState(false);
 
     const navigate = useNavigate();
+
+
+    console.log(data)
 
     function clickChange() {
         if (click) {
@@ -22,7 +26,7 @@ export default function NavBar() {
                 <div>
                     <div className="user" onClick={clickChange}>
                         <ion-icon name="chevron-up-outline"></ion-icon>
-                        <img src="https://cbissn.ibict.br/images/phocagallery/galeria2/thumbs/phoca_thumb_l_image03_grd.png" />
+                        <img src={data.picture} />
                     </div>
                     <div className="logout">
                         <span>Logout</span>
@@ -33,7 +37,7 @@ export default function NavBar() {
             return(
                 <div className="user" onClick={clickChange}>
                     <ion-icon name="chevron-down-outline"></ion-icon>
-                    <img src="https://cbissn.ibict.br/images/phocagallery/galeria2/thumbs/phoca_thumb_l_image03_grd.png" />
+                    <img src={data.picture} />
                 </div>
             )
         }

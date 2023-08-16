@@ -11,7 +11,7 @@ export const AuthProvider = ({children}) => {
         axios.post(process.env.REACT_APP_API_URL + "/login",
          { email: email, password: password}).then((r)=>{
              localStorage.setItem("token",r.data.token);
-             localStorage.setItem("userData",r.data.userData)
+             localStorage.setItem("userData",JSON.stringify(r.data.userData))
              setButtonState(false)
              navigate("/timeline")
             }).catch((e)=>{

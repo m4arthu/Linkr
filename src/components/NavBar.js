@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import { styled } from "styled-components"
+import axios from "axios";
 
 export default function NavBar() {
     
@@ -8,7 +9,8 @@ export default function NavBar() {
     let [click, setClick] = useState(false);
 
     const navigate = useNavigate();
-
+    const token = localStorage.getItem("token");
+console.log(token);
 
     console.log(data)
 
@@ -20,6 +22,17 @@ export default function NavBar() {
         }
     }
 
+    function logOut() {
+        const token = localStorage.getItem("token");
+        axios.delete(`${process.env.REACT_APP_API_URL}/logout`, {headers: {Authorization: `Bearer ${token}`}})
+             .then(res => {
+                localStorage.removeItem('userData');
+                localStorage.removeItem('token');
+                navigate('/');
+             })
+             .catch(err => alert(err.response.data));
+    }
+
     function Profile() {
         if (click) {
             return(
@@ -29,7 +42,7 @@ export default function NavBar() {
                         <img src={data.picture} />
                     </div>
                     <div className="logout">
-                        <span>Logout</span>
+                        <span onClick={logOut}>Logout</span>
                     </div>
                 </div>
             )

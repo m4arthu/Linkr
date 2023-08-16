@@ -8,6 +8,10 @@ export default function NavBar() {
 
     const navigate = useNavigate();
 
+    const data = JSON.parse(localStorage.getItem("userData"));
+
+    console.log(data)
+
     function clickChange() {
         if (click) {
             setClick(false);

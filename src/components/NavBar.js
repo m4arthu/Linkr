@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import { styled } from "styled-components"
 import axios from "axios";
+import { DebounceInput } from "react-debounce-input";
 
 export default function NavBar() {
 
     const data = JSON.parse(localStorage.getItem("userData"));
     let [click, setClick] = useState(false);
+    let text = '';
 
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
@@ -20,6 +22,11 @@ export default function NavBar() {
         } else {
             setClick(true);
         }
+    }
+
+    function searchUser(e) {
+        text = e.target.value;
+        console.log(text);
     }
 
     function logOut() {
@@ -60,7 +67,13 @@ export default function NavBar() {
         <ContainerGeral>
             <h1 onClick={() => navigate('/timeline')}>linkr</h1>
             <div className="search">
-                <input placeholder="Search for people" />
+                <DebounceInput
+                    minLength={3}
+                    debounceTimeout={300}
+                    value={text} 
+                    onChange={searchUser}
+                    placeholder="Search for people and friends"
+                />
                 <ion-icon name="search"></ion-icon>
             </div>
             <Profile />
@@ -76,6 +89,7 @@ const ContainerGeral = styled.div`
     justify-content: space-between;
     padding: 15px;
     position: relative;
+    width: 100%;
     h1{
         font-family: 'Passion One', cursive;
         color: white;
@@ -138,6 +152,8 @@ const ContainerGeral = styled.div`
         }
     }
     @media(max-width:400px){
-        
+        input{
+            width: 350px;
+        }
     }
 `

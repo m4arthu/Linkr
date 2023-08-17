@@ -68,6 +68,16 @@ export default function NavBar() {
         }
     }
 
+    function Pesquisa() {
+        if (users != '') {
+            return(
+                <div cla>
+                    {users.map(user => <div>{user.username}</div> )}
+                </div>
+            )
+        }
+    }
+
     return (
         <ContainerGeral>
             <h1 onClick={() => navigate('/timeline')}>linkr</h1>
@@ -80,6 +90,7 @@ export default function NavBar() {
                     placeholder="Search for people and friends"
                 />
                 <ion-icon name="search"></ion-icon>
+                <Pesquisa />
             </div>
             <Profile />
         </ContainerGeral>

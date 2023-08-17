@@ -4,6 +4,7 @@ import { RegisterPage } from "./pages/registerPage.js";
 import { AuthProvider } from "./contexts/authContext.js";
 import axios from "axios";
 import HomePage from "./pages/HomePage.js";
+import TimelinePage from "./pages/TimelinePage.js";
 function App() {
   const  isLoged = () => {
     let token = localStorage.getItem("token")
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/timeline" element={<TimelinePage />} />
           <Route path="/home" element={<HomePage />} />
         </Routes>
       </AuthProvider>

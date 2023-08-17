@@ -137,4 +137,7 @@ const ContainerGeral = styled.div`
             cursor: pointer;
         }
     }
+    @media(max-width:400px){
+        
+    }
 `

@@ -109,6 +109,7 @@ const ContainerGeral = styled.div`
     padding: 15px;
     position: relative;
     width: 100%;
+    z-index:9;
     h1{
         font-family: 'Passion One', cursive;
         color: white;
@@ -125,6 +126,7 @@ const ContainerGeral = styled.div`
             right: 10px;
             font-size: 25px;
             cursor: pointer;
+            z-index: 11;
         }
         input{
             font-family:'lato',sans-serif;

@@ -3,7 +3,7 @@ import NavBar from "../components/NavBar";
 import { useState } from "react";
 import axios from "axios";
 
-export default function HomePage() {
+export default function TimelinePage() {
     const data = JSON.parse(localStorage.getItem("userData"));
     const [url, setUrl] = useState();
     const [text, setText] = useState();

@@ -19,11 +19,13 @@ export default function HomePage() {
         
         axios.post(`${process.env.REACT_APP_API_URL}/timeline`,body,{ headers: { Authorization: `Bearer ${token}` }})
             .then((res)=>{
-                console.log(res)
-
+                setClicked(false);
+                setUrl('')
+                setText('')
             })
             .catch((err)=>{
                 setClicked(false);
+                alert('Houve um erro ao publicar seu link')
                 
             })
     }

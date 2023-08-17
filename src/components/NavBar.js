@@ -73,10 +73,10 @@ export default function NavBar() {
     }
 
     function Pesquisa() {
-        if (users != '') {
+        if (users !== '') {
             return(
                 <DivBuscas>
-                    {users.map(user => <div><img src={user.picture}/> {user.username}</div> )}
+                    {users.map(user => <div><img src={user.picture} alt=''/> {user.username}</div> )}
                 </DivBuscas>
             )
         }

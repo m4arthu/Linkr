@@ -5,6 +5,9 @@ export const Container = styled.div`
 width:100%;
 height:100vh;
 display:flex;
+@media(max-width:400px){
+    flex-direction:column;
+}
 `
 
 export const LoginFormContainer = styled.form`
@@ -15,6 +18,7 @@ align-items:center;
 gap:15px;
 width:35vw;
 background-color:${(props)=>props.color? props.color: "inherit"};
+
 input{
     border-radius:12px;
     width:429px;
@@ -40,6 +44,20 @@ a{
     color:white;
     font-size:20px;
 }
+@media(max-width:400px){
+    width:100%;
+    height:100%;
+    justify-content: inherit;
+    padding-top:50px;
+    input{
+        width:330px;
+        height:55px;
+    }
+    button{
+        width:330px;
+        height:55px;
+    }
+}
 `
 export const LoginMenu = styled.div`
 width:65vw;
@@ -49,11 +67,16 @@ display:flex;
 align-items:center;
 z-index: 1000;
 box-shadow: 4px 0px 4px 0px #00000040;
+@media(max-width:400px){
+    width:100vw;
+    height:175px;
+}
 `
 export const Slogan = styled.div`
 margin-left:100px;
 font-family: 'Passion One', cursive;
 color:white;
+
 h1{
     font-size:106px;
     font-weight:700;
@@ -63,5 +86,23 @@ p{
     width:400px;
     font-size:43px;
     line-height:64px;
+}
+@media(max-width:400px){
+    width:100%;
+    line-height:50px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding: 20px 0;
+    margin:0 0 0 20px;;
+    h1{
+        width:167px;
+        font-size:76px;
+    }
+    p{
+        line-height:35px;
+        width:223px;
+        font-size:23px;
+    }
 }
 `

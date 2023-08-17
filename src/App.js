@@ -21,6 +21,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/timeline" element={<TimelinePage />} />
           <Route path="/home" element={<HomePage />} />
         </Routes>
       </AuthProvider>

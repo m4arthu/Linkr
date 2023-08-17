@@ -1,17 +1,69 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom"
 import { styled } from "styled-components"
+import axios from "axios";
 
 export default function NavBar() {
+    
+    const data = JSON.parse(localStorage.getItem("userData"));
+    let [click, setClick] = useState(false);
+
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token");
+console.log(token);
+
+    console.log(data)
+
+    function clickChange() {
+        if (click) {
+            setClick(false);
+        } else{
+            setClick(true);
+        }
+    }
+
+    function logOut() {
+        const token = localStorage.getItem("token");
+        axios.delete(`${process.env.REACT_APP_API_URL}/logout`, {headers: {Authorization: `Bearer ${token}`}})
+             .then(res => {
+                localStorage.removeItem('userData');
+                localStorage.removeItem('token');
+                navigate('/');
+             })
+             .catch(err => alert(err.response.data));
+    }
+
+    function Profile() {
+        if (click) {
+            return(
+                <div>
+                    <div className="user" onClick={clickChange}>
+                        <ion-icon name="chevron-up-outline"></ion-icon>
+                        <img src={data.picture} />
+                    </div>
+                    <div className="logout">
+                        <span onClick={logOut}>Logout</span>
+                    </div>
+                </div>
+            )
+        } else {
+            return(
+                <div className="user" onClick={clickChange}>
+                    <ion-icon name="chevron-down-outline"></ion-icon>
+                    <img src={data.picture} />
+                </div>
+            )
+        }
+    }
+
     return(
         <ContainerGeral>
-            <h1>linkr</h1>
-            {/* <div className="search">
+            <h1 onClick={() => navigate('/home')}>linkr</h1>
+            <div className="search">
                 <input placeholder="Search for people"/>
                 <ion-icon name="search"></ion-icon>
-            </div> */}
-            <div className="user">
-                <ion-icon name="chevron-down-outline"></ion-icon>
-                <img src="https://cbissn.ibict.br/images/phocagallery/galeria2/thumbs/phoca_thumb_l_image03_grd.png" alt='ImagemPerfil' />
             </div>
+            <Profile />
         </ContainerGeral>
     )
 }
@@ -23,6 +75,7 @@ const ContainerGeral = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 15px;
+    position: relative;
     h1{
         font-family: 'Passion One', cursive;
         color: white;
@@ -64,5 +117,27 @@ const ContainerGeral = styled.div`
             height: 50px;
             border-radius: 100%;
         }
+    }
+    .logout{
+        font-family: 'lato';
+        font-size: 17px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        height: 47px;
+        width: 150px;
+        position: absolute;
+        right: 0;
+        bottom: -47px;
+        background-color: #151515;
+        border-bottom-left-radius: 20px;
+        span:hover{
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+    @media(max-width:400px){
+        
     }
 `

@@ -17,8 +17,8 @@ export  const  LoginPage = () => {
         <Container>
             <SloganComponent/>
             <LoginFormContainer onSubmit={sendLogin} color="#333333">
-            <input type="text" ref={email} placeholder="e-mail"/>
-                <input type="password" ref={password} placeholder="Password"/>
+            <input type="text" ref={email} placeholder="e-mail" required/>
+                <input type="password" ref={password} placeholder="Password" required/>
                 <button disabled={buttonState}>Log In</button>
                 <Link to={"/register"}>First time? Create an account!</Link>
             </LoginFormContainer>

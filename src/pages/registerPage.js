@@ -20,10 +20,10 @@ export const RegisterPage = () => {
         <Container>
             <SloganComponent />
             <LoginFormContainer onSubmit={sendRegister} color="#333333">
-                <input type="text" ref={email} placeholder="e-mail" />
-                <input type="password" ref={password} placeholder="Password" />
-                <input type="text" ref={name} placeholder="username" />
-                <input type="text" ref={picture} placeholder="picture url" />
+                <input type="text" ref={email} placeholder="e-mail" required />
+                <input type="password" ref={password} placeholder="Password" required />
+                <input type="text" ref={name} placeholder="username" required />
+                <input type="text" ref={picture} placeholder="picture url" required/>
                 <button disabled={buttonState} >Log In</button>
                 <Link to={"/"}>Switch back to log in</Link>
             </LoginFormContainer>

@@ -48,7 +48,9 @@ export default function HomePage() {
                             <Button disabled={clicked} type='submit'>{clicked ? 'Publishing...': 'Publish'}</Button>
                         </FormShare>
                     </ShareMe>
-                    <ul></ul>
+                    <Posts>
+
+                    </Posts>
 
                 </Timeline>
 
@@ -153,3 +155,10 @@ const Button = styled.button`
     font-family: 'Lato', sans-serif;
     font-weight:700;
     `
+
+const Posts = styled.ul`
+    height:100%;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+`

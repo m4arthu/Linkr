@@ -1,11 +1,33 @@
 import { styled } from "styled-components";
 import NavBar from "../components/NavBar";
 import { useState } from "react";
+import axios from "axios";
 
 export default function HomePage() {
     const data = JSON.parse(localStorage.getItem("userData"));
     const [url, setUrl] = useState();
     const [text, setText] = useState();
+
+    function publish(e){
+        e.preventDefault();
+        const token = localStorage.getItem("token");
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const body = {url,text}
+
+        axios.post(`${process.env.REACT_APP_API_URL}/timeline`,config,body)
+            .then((res)=>{
+                console.log('oui')
+
+            })
+            .catch((err)=>{
+                console.log(err.response)
+            })
+    }
 
     return (
         <>
@@ -18,7 +40,7 @@ export default function HomePage() {
                             <img src={data.picture} alt="Imagem de perfil"></img>
                         </Imagem>
 
-                        <FormShare>
+                        <FormShare onSubmit={(e)=>{publish(e)}}>
                             <label htmlFor="url">What are you going to share today?</label>
                             <input type="url" id="url" placeholder='http://...' value={url} onChange={(e) => { setUrl(e.target.value) }} required />
                             <input type="text" placeholder='Awesome article about #javascript' value={text} onChange={(e) => { setText(e.target.value) }} required />
@@ -122,7 +144,7 @@ const Button = styled.button`
     height:31px;
     max-width:112px;
     border-radius:5px;
-    margin: 5px 0px 0px 392px;
+    margin: 5px 0px 0px 395px;
     border:none;
     color:#FFFFFF;
     font-size:14px;

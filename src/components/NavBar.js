@@ -27,9 +27,13 @@ export default function NavBar() {
 
     function searchUser(e) {
         text = e.target.value;
-        axios.get(`${process.env.REACT_APP_API_URL}/search/${text}`, { headers: { Authorization: `Bearer ${token}` } })
+        if (text.length >= 3){
+            axios.get(`${process.env.REACT_APP_API_URL}/search/${text}`, { headers: { Authorization: `Bearer ${token}` } })
              .then(res => setUsers(res.data))
              .catch(err => alert(err.response.data));
+        } else {
+            setUsers('');
+        }
         console.log(text);
     }
 
@@ -71,9 +75,9 @@ export default function NavBar() {
     function Pesquisa() {
         if (users != '') {
             return(
-                <div cla>
-                    {users.map(user => <div>{user.username}</div> )}
-                </div>
+                <DivBuscas>
+                    {users.map(user => <div><img src={user.picture}/> {user.username}</div> )}
+                </DivBuscas>
             )
         }
     }
@@ -83,7 +87,6 @@ export default function NavBar() {
             <h1 onClick={() => navigate('/timeline')}>linkr</h1>
             <div className="search">
                 <DebounceInput
-                    minLength={3}
                     debounceTimeout={300}
                     value={text} 
                     onChange={searchUser}
@@ -115,7 +118,7 @@ const ContainerGeral = styled.div`
     .search{
         display: flex;
         align-items: center;
-        color: #C6C6C6;
+        color: red;
         position: relative;
         ion-icon{
             position: absolute;
@@ -131,6 +134,7 @@ const ContainerGeral = styled.div`
             border-radius: 8px;
             border: none;
             font-size: 15px;
+            z-index:10;
         }
     }
     .user{
@@ -171,5 +175,31 @@ const ContainerGeral = styled.div`
         input{
             width: 350px;
         }
+    }
+`
+
+const DivBuscas = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #E7E7E7;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    width: 563px;
+    position: absolute;
+    top: 40px;
+    padding: 20px;
+    color: #515151;
+    font-family: 'lato';
+    font-size: 19px;
+    img{
+        width: 39px;
+        height: 39px;
+        border-radius: 100%;
+    }
+    >div{
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
 `

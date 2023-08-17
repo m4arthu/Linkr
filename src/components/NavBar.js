@@ -26,6 +26,9 @@ export default function NavBar() {
 
     function searchUser(e) {
         text = e.target.value;
+        axios.get(`${process.env.REACT_APP_API_URL}/search/${text}`)
+             .then(res => console.log(res))
+             .catch(err => alert(err.response.data));
         console.log(text);
     }
 

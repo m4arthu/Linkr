@@ -13,7 +13,7 @@ export const AuthProvider = ({children}) => {
              localStorage.setItem("token",r.data.token);
              localStorage.setItem("userData",JSON.stringify(r.data.userData))
              setButtonState(false)
-             navigate("/timeline")
+             navigate("/home")
             }).catch((e)=>{
                 setButtonState(false)
             alert(e.response.data)

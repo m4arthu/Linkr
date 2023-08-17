@@ -4,42 +4,42 @@ import { styled } from "styled-components"
 import axios from "axios";
 
 export default function NavBar() {
-    
+
     const data = JSON.parse(localStorage.getItem("userData"));
     let [click, setClick] = useState(false);
 
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
-console.log(token);
+    console.log(token);
 
     console.log(data)
 
     function clickChange() {
         if (click) {
             setClick(false);
-        } else{
+        } else {
             setClick(true);
         }
     }
 
     function logOut() {
         const token = localStorage.getItem("token");
-        axios.delete(`${process.env.REACT_APP_API_URL}/logout`, {headers: {Authorization: `Bearer ${token}`}})
-             .then(res => {
+        axios.delete(`${process.env.REACT_APP_API_URL}/logout`, { headers: { Authorization: `Bearer ${token}` } })
+            .then(res => {
                 localStorage.removeItem('userData');
                 localStorage.removeItem('token');
                 navigate('/');
-             })
-             .catch(err => alert(err.response.data));
+            })
+            .catch(err => alert(err.response.data));
     }
 
     function Profile() {
         if (click) {
-            return(
+            return (
                 <div>
                     <div className="user" onClick={clickChange}>
                         <ion-icon name="chevron-up-outline"></ion-icon>
-                        <img src={data.picture} />
+                        <img src={data.picture} alt="ImagemPerfil" />
                     </div>
                     <div className="logout">
                         <span onClick={logOut}>Logout</span>
@@ -47,20 +47,20 @@ console.log(token);
                 </div>
             )
         } else {
-            return(
+            return (
                 <div className="user" onClick={clickChange}>
                     <ion-icon name="chevron-down-outline"></ion-icon>
-                    <img src={data.picture} />
+                    <img src={data.picture} alt="ImagemPerfil"/>
                 </div>
             )
         }
     }
 
-    return(
+    return (
         <ContainerGeral>
             <h1 onClick={() => navigate('/home')}>linkr</h1>
             <div className="search">
-                <input placeholder="Search for people"/>
+                <input placeholder="Search for people" />
                 <ion-icon name="search"></ion-icon>
             </div>
             <Profile />

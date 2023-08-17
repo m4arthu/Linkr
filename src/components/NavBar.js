@@ -8,6 +8,7 @@ export default function NavBar() {
 
     const data = JSON.parse(localStorage.getItem("userData"));
     let [click, setClick] = useState(false);
+    let [users, setUsers] = useState('');
     let text = '';
 
     const navigate = useNavigate();
@@ -26,14 +27,15 @@ export default function NavBar() {
 
     function searchUser(e) {
         text = e.target.value;
-        axios.get(`${process.env.REACT_APP_API_URL}/search/${text}`)
-             .then(res => console.log(res))
+        axios.get(`${process.env.REACT_APP_API_URL}/search/${text}`, { headers: { Authorization: `Bearer ${token}` } })
+             .then(res => setUsers(res.data))
              .catch(err => alert(err.response.data));
         console.log(text);
     }
 
+    console.log(users)
+
     function logOut() {
-        const token = localStorage.getItem("token");
         axios.delete(`${process.env.REACT_APP_API_URL}/logout`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
                 localStorage.removeItem('userData');

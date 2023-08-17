@@ -118,7 +118,7 @@ const ContainerGeral = styled.div`
     .search{
         display: flex;
         align-items: center;
-        color: red;
+        color: #C6C6C6;
         position: relative;
         ion-icon{
             position: absolute;

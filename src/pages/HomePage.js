@@ -7,25 +7,24 @@ export default function HomePage() {
     const data = JSON.parse(localStorage.getItem("userData"));
     const [url, setUrl] = useState();
     const [text, setText] = useState();
+    const [clicked,setClicked] = useState(false);
 
     function publish(e){
         e.preventDefault();
+
+        setClicked(true);
         const token = localStorage.getItem("token");
 
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }
         const body = {url,text}
-
-        axios.post(`${process.env.REACT_APP_API_URL}/timeline`,config,body)
+        
+        axios.post(`${process.env.REACT_APP_API_URL}/timeline`,body,{ headers: { Authorization: `Bearer ${token}` }})
             .then((res)=>{
-                console.log('oui')
+                console.log(res)
 
             })
             .catch((err)=>{
-                console.log(err.response)
+                setClicked(false);
+                
             })
     }
 
@@ -42,9 +41,9 @@ export default function HomePage() {
 
                         <FormShare onSubmit={(e)=>{publish(e)}}>
                             <label htmlFor="url">What are you going to share today?</label>
-                            <input type="url" id="url" placeholder='http://...' value={url} onChange={(e) => { setUrl(e.target.value) }} required />
-                            <input type="text" placeholder='Awesome article about #javascript' value={text} onChange={(e) => { setText(e.target.value) }} required />
-                            <Button type='submit'>{'Publish'}</Button>
+                            <input disabled={clicked} type="url" id="url" placeholder='http://...' value={url} onChange={(e) => { setUrl(e.target.value) }} required />
+                            <input disabled={clicked} type="text" placeholder='Awesome article about #javascript' value={text} onChange={(e) => { setText(e.target.value) }} required />
+                            <Button disabled={clicked} type='submit'>{clicked ? 'Publishing...': 'Publish'}</Button>
                         </FormShare>
                     </ShareMe>
                     <ul></ul>

@@ -142,6 +142,9 @@ const ContainerGeral = styled.div`
             border: none;
             font-size: 15px;
             z-index:10;
+            @media(max-width:400px){
+                width: 350px;
+            }
         }
     }
     .user{
@@ -176,11 +179,6 @@ const ContainerGeral = styled.div`
         span:hover{
             text-decoration: underline;
             cursor: pointer;
-        }
-    }
-    @media(max-width:400px){
-        input{
-            width: 350px;
         }
     }
 `

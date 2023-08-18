@@ -74,7 +74,7 @@ export default function UserPage() {
 
     return (
         <>
-            <NavBar />
+            <NavBar click={clicked} setClick={setClicked} />
             <ContainerHome>
                 <Timeline>
                     <h1>{username}'s posts</h1>

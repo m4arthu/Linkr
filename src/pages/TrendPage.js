@@ -3,6 +3,7 @@ import NavBar from "../components/NavBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import urlMetadata from "url-metadata";
 
 export default function TimelinePage() {
     const data = JSON.parse(localStorage.getItem("userData"));

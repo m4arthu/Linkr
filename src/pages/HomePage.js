@@ -4,27 +4,72 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export default function TimelinePage() {
+export default function TimelinePage({click, setClick}) {
     const data = JSON.parse(localStorage.getItem("userData"));
     const [url, setUrl] = useState();
     const [text, setText] = useState();
     const [clicked,setClicked] = useState(false);
     const [trends, setTrends] = useState([]);
     const navigate = useNavigate();
+    const [posts, setPosts] = useState([]);
+    const token = localStorage.getItem('token')
+
+    const [metaData, setMetaData] = useState({
+        title: '',
+        description: '',
+        image: '',
+        url: ''
+      });
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
              .then(res => setTrends(res.data))
-             .catch(err => alert(err.response.data));
+             .catch(err => alert(err.response.data)) 
     }, []);
 
-    console.log(trends);
+    useEffect(()=>{
+        axios.get(`${process.env.REACT_APP_API_URL}/timeline`,{ headers: { Authorization: `Bearer ${token}` }})
+             .then((res) => {
+                setPosts(res.data)   
+                setMetaData({
+                    title: '',
+                    description: '',
+                    image: '',
+                    url:  res.data[0].articleUrl
+                  })               
+            })
+             .catch((err)=> {
+                alert(err.response.data)})  
+    },[token]);
+
+    useEffect(() => {
+        const fetchMetaData = async () => {
+          try {
+            const response = '' //await LinkPreview.getPreview(metaData.url);
+            console.log(response)
+    
+            setMetaData({
+              ...metaData,
+              title: response.title || '',
+              description: response.description || '',
+              image: response.images.length > 0 ? response.images[0] : '',
+            });
+          } catch (error) {
+            console.error('Erro ao buscar metadados:', error);
+          }
+        };
+    
+        fetchMetaData();
+        
+      }, [metaData]);
+    /* console.log(posts)
+    console.log(trends); */
+
 
     function publish(e){
         e.preventDefault();
 
         setClicked(true);
-        const token = localStorage.getItem("token");
         
         const body = {url,text}
 
@@ -42,7 +87,7 @@ export default function TimelinePage() {
     }
 
     function TrendsContainer() {
-        if (trends.length == 0) {
+        if (trends.length === 0) {
             return(
                 <TrendStyled>
                     <h1>trending</h1>
@@ -62,8 +107,8 @@ export default function TimelinePage() {
 
     return (
         <>
-            <NavBar />
-            <ContainerHome>
+            <NavBar click={click} setClick={setClick}/>
+            <ContainerHome onClick={() => setClick(false)}>
                 <Timeline>
                     <h1>timeline</h1>
                     <ShareMe>
@@ -79,7 +124,27 @@ export default function TimelinePage() {
                         </FormShare>
                     </ShareMe>
                     <Posts>
+                        {posts.length>0?
+                    <PostContainer>
+                                <div className="direita">
+                                            <img src={posts[0].picture} alt=""/>
+                                            <div>
+                                                <ion-icon name="heart-outline"></ion-icon>
+                                                <span>0 likes</span>
+                                            </div>
+                                        </div>
+                                        <div className="esquerda">
+                                            <h2>{posts[0].username}</h2>
+                                            <h3>{posts[0].post}</h3>
+                                            <div className="card">
+                                                <h2>{metaData.title}</h2>
+                                                {metaData.image && <img src={metaData.image} alt="Imagem da Matéria" />}
+                                                <p>{metaData.description}</p>
+                                                <a href={metaData.url}>Leia mais</a>
+                                            </div>
 
+                                </div>    
+                            </PostContainer>:<></>}
                     </Posts>
 
                 </Timeline>
@@ -222,5 +287,55 @@ const TrendStyled = styled.div`
     p:hover{
         text-decoration: underline;
         cursor: pointer;
+    }
+`
+
+const PostContainer = styled.li`
+    font-family: 'Lato', sans-serif;
+    background-color: #171717;
+    border-radius: 16px;
+    padding: 15px;
+    display: flex;
+    gap: 20px;
+    .direita{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        img{
+            width: 50px;
+            height: 50px;
+            border-radius: 100%;
+        }
+        div{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            font-weight: 400;
+            gap: 2px;
+            ion-icon{
+                font-size: 20px;
+            }
+        }
+    }
+    .esquerda{
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        :nth-child(1){
+            font-weight: 400;
+            font-size: 20px;
+        }
+        :nth-child(2){
+            font-weight: 400;
+            font-size: 17px;
+            color: #C6C6C6;
+            span{
+                color: white;
+                font-weight: 600;
+                font-size: 17px;
+            }
+        }
     }
 `

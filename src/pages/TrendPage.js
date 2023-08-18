@@ -5,7 +5,7 @@ import axios from "axios";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import urlMetadata from "url-metadata";
 
-export default function TimelinePage() {
+export default function TimelinePage({click, setClick}) {
     const data = JSON.parse(localStorage.getItem("userData"));
     const [trends, setTrends] = useState([]);
     const [posts, setPosts] = useState([]);
@@ -27,14 +27,14 @@ export default function TimelinePage() {
              .then(res => setPosts(res.data))
              .catch(err => alert(err.response.data));
 
-    }, []);
+    }, [id]);
 
     console.log(trends);
     console.log(posts);
 
 
     function TrendsContainer() {
-        if (trends.length == 0) {
+        if (trends.length === 0) {
             return(
                 <TrendStyled>
                     <h1>trending</h1>
@@ -54,15 +54,15 @@ export default function TimelinePage() {
 
     return (
         <>
-            <NavBar />
-            <ContainerHome>
+            <NavBar click={click} setClick={setClick}/>
+            <ContainerHome onClick={() => setClick(false)}>
                 <Timeline>
                     <h1># {hashtag}</h1>
                     <Posts>
                         {posts.map(post => 
                             <PostContainer>
                                     <div className="direita">
-                                        <img src={post.picture} />
+                                        <img src={post.picture} alt=""/>
                                         <div>
                                             <ion-icon name="heart-outline"></ion-icon>
                                             <span>{post.num_likes} likes</span>

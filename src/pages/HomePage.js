@@ -14,6 +14,7 @@ export default function TimelinePage({click, setClick}) {
     const [posts, setPosts] = useState([]);
     const token = localStorage.getItem('token')
 
+
     const [metaData, setMetaData] = useState({
         title: '',
         description: '',
@@ -41,7 +42,6 @@ export default function TimelinePage({click, setClick}) {
              .catch((err)=> {
                 alert(err.response.data)})  
     },[token]);
-
     useEffect(() => {
         const fetchMetaData = async () => {
           try {

@@ -1,5 +1,30 @@
+import axios from "axios"
+import { useEffect, useState } from "react"
 import { styled } from "styled-components"
+import { load } from "cheerio"
 export default function PostComponent(props){
+    const [meta, setMeta] = useState({})
+
+    const parseHTML = (html) => {
+        const $ = load(html);
+
+        const title = $('meta[property="og:title"]').attr('content');
+        const description = $('meta[property="og:description"]').attr('content');
+        const image = $('meta[property="og:image"]').attr('content');
+
+        setMeta({
+            title, description, image
+        })
+        }
+        console.log(meta)
+
+   useEffect(() => {
+    axios.get(`https://cors-anywhere.herokuapp.com/${(props.articleUrl).slice(1, -1)}`)
+        .then(res =>{
+            parseHTML(res.data)
+        })
+        .catch(console.log)
+   }, [])
 
     return (
         <PostContainer>

@@ -7,6 +7,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 export default function TimelinePage() {
     const data = JSON.parse(localStorage.getItem("userData"));
     const [trends, setTrends] = useState([]);
+    const [posts, setPosts] = useState([]);
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
@@ -21,9 +22,14 @@ export default function TimelinePage() {
         axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
              .then(res => setTrends(res.data))
              .catch(err => alert(err.response.data));
+        axios.get(`${process.env.REACT_APP_API_URL}/hashtag/${id}`)
+             .then(res => setPosts(res.data))
+             .catch(err => alert(err.response.data));
+
     }, []);
 
     console.log(trends);
+    console.log(posts);
 
 
     function TrendsContainer() {

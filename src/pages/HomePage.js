@@ -113,7 +113,8 @@ export default function TimelinePage({click, setClick}) {
                     <h1>timeline</h1>
                     <ShareMe>
                         <Imagem>
-                            <img src={data.picture} alt="Imagem de perfil"></img>
+                        <img src={data.picture} alt="Imagem de perfil"></img>
+
                         </Imagem>
 
                         <FormShare onSubmit={(e)=>{publish(e)}}>
@@ -166,7 +167,6 @@ const Timeline = styled.div`
     padding-top: 78px;
     width:611px;
     height:100%;
-    background-color:yellow;
     font-family: 'Oswald', sans-serif;
     font-weight:700;
     font-size:43px;
@@ -187,13 +187,20 @@ const ShareMe = styled.div`
 `
 
 const Imagem = styled.div`
+    box-sizing: border-box;
     height:50px;
+    width:50px;
+    min-width: 50px;
+    background-color: blue;
+    overflow: hidden;
     border-radius:100%;
-    img{
-        margin-top:16px;
-        margin-left:18px;
+    margin-top:16px;
+    margin-left:18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img{    
         height:100%;
-        border-radius:100%;
     }
 `
 

@@ -13,9 +13,9 @@ export default function NavBar() {
 
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
-    console.log(token);
+    /* console.log(token);
 
-    console.log(data)
+    console.log(data) */
 
     function clickChange() {
         if (click) {
@@ -34,10 +34,10 @@ export default function NavBar() {
         } else {
             setUsers('');
         }
-        console.log(text);
+        /* console.log(text); */
     }
 
-    console.log(users)
+    /* console.log(users) */
 
     function logOut() {
         axios.delete(`${process.env.REACT_APP_API_URL}/logout`, { headers: { Authorization: `Bearer ${token}` } })

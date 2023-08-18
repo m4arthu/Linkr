@@ -58,7 +58,21 @@ export default function TimelinePage() {
                 <Timeline>
                     <h1># {hashtag}</h1>
                     <Posts>
-
+                        {posts.map(post => 
+                            <PostContainer>
+                                    <div className="direita">
+                                        <img src={post.picture} />
+                                        <div>
+                                            <ion-icon name="heart-outline"></ion-icon>
+                                            <span>{post.num_likes} likes</span>
+                                        </div>
+                                    </div>
+                                    <div className="esquerda">
+                                        <h2>{post.username}</h2>
+                                        <h3>{post.post} {post.trends_array.trends.map(trend => <span>#{trend} </span>)}</h3>
+                                    </div>
+                            </PostContainer>
+                        )}
                     </Posts>
 
                 </Timeline>
@@ -95,6 +109,8 @@ const Posts = styled.ul`
     width:100%;
     display:flex;
     flex-direction:column;
+    gap: 20px;
+    margin-top: 43px;
 `
 
 const TrendStyled = styled.div`
@@ -125,5 +141,55 @@ const TrendStyled = styled.div`
     p:hover{
         text-decoration: underline;
         cursor: pointer;
+    }
+`
+
+const PostContainer = styled.div`
+    font-family: 'Lato', sans-serif;
+    background-color: #171717;
+    border-radius: 16px;
+    padding: 15px;
+    display: flex;
+    gap: 20px;
+    .direita{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        img{
+            width: 50px;
+            height: 50px;
+            border-radius: 100%;
+        }
+        div{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            font-weight: 400;
+            gap: 2px;
+            ion-icon{
+                font-size: 20px;
+            }
+        }
+    }
+    .esquerda{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        :nth-child(1){
+            font-weight: 400;
+            font-size: 20px;
+        }
+        :nth-child(2){
+            font-weight: 400;
+            font-size: 15px;
+            color: #C6C6C6;
+            span{
+                color: white;
+                font-weight: 600;
+                font-size: 15px;
+            }
+        }
     }
 `

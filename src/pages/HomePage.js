@@ -14,9 +14,9 @@ export default function TimelinePage() {
 
         setClicked(true);
         const token = localStorage.getItem("token");
-
-        const body = {url,text}
         
+        const body = {url,text}
+
         axios.post(`${process.env.REACT_APP_API_URL}/timeline`,body,{ headers: { Authorization: `Bearer ${token}` }})
             .then((res)=>{
                 setClicked(false);

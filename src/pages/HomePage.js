@@ -3,82 +3,96 @@ import NavBar from "../components/NavBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import PostComponent from "../components/PostComponent";
 
-export default function TimelinePage({click, setClick}) {
+export default function TimelinePage({ click, setClick }) {
     const data = JSON.parse(localStorage.getItem("userData"));
     const [url, setUrl] = useState();
     const [text, setText] = useState();
-    const [clicked,setClicked] = useState(false);
+    const [clicked, setClicked] = useState(false);
     const [trends, setTrends] = useState([]);
     const navigate = useNavigate();
+    const [posts, setPosts] = useState([]);
+    const token = localStorage.getItem('token')
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
-             .then(res => setTrends(res.data))
-             .catch(err => alert(err.response.data));
+            .then(res => setTrends(res.data))
+            .catch(err => alert(err.response.data))
     }, []);
 
-    console.log(trends);
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_API_URL}/timeline`, { headers: { Authorization: `Bearer ${token}` } })
+            .then((res) => {
+                setPosts(res.data)
+            })
+            .catch((err) => {
+                alert(err.response.data)
+            })
+    }, [token]);
 
-    function publish(e){
+    function publish(e) {
         e.preventDefault();
 
         setClicked(true);
-        const token = localStorage.getItem("token");
-        
-        const body = {url,text}
 
-        axios.post(`${process.env.REACT_APP_API_URL}/timeline`,body,{ headers: { Authorization: `Bearer ${token}` }})
-            .then((res)=>{
+        const body = { url, text }
+
+        axios.post(`${process.env.REACT_APP_API_URL}/timeline`, body, { headers: { Authorization: `Bearer ${token}` } })
+            .then((res) => {
                 setClicked(false);
                 setUrl('')
                 setText('')
             })
-            .catch((err)=>{
+            .catch((err) => {
                 setClicked(false);
                 alert('Houve um erro ao publicar seu link')
-                
+
             })
     }
 
     function TrendsContainer() {
-        if (trends.length == 0) {
-            return(
+        if (trends.length === 0) {
+            return (
                 <TrendStyled>
                     <h1>trending</h1>
                 </TrendStyled>
             )
         } else {
-            return(
+            return (
                 <TrendStyled>
                     <h1>trending</h1>
                     <div>
-                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend}`, {state: {id: trend.id}})}># {trend.trend}</p>)}
+                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend}`, { state: { id: trend.id } })}># {trend.trend}</p>)}
                     </div>
                 </TrendStyled>
             )
         }
     }
+    console.log(posts)
 
     return (
         <>
-            <NavBar click={click} setClick={setClick}/>
+            <NavBar click={click} setClick={setClick} />
             <ContainerHome onClick={() => setClick(false)}>
                 <Timeline>
                     <h1>timeline</h1>
                     <ShareMe>
                         <Imagem>
-                            <img src={data.picture} alt="Imagem de perfil"></img>
+                        <img src={data.picture} alt="Imagem de perfil"></img>
+
                         </Imagem>
 
-                        <FormShare onSubmit={(e)=>{publish(e)}}>
+                        <FormShare onSubmit={(e) => { publish(e) }}>
                             <label htmlFor="url">What are you going to share today?</label>
                             <input disabled={clicked} type="url" id="url" placeholder='http://...' value={url} onChange={(e) => { setUrl(e.target.value) }} required />
                             <input disabled={clicked} type="text" placeholder='Awesome article about #javascript' value={text} onChange={(e) => { setText(e.target.value) }} required />
-                            <Button disabled={clicked} type='submit'>{clicked ? 'Publishing...': 'Publish'}</Button>
+                            <Button disabled={clicked} type='submit'>{clicked ? 'Publishing...' : 'Publish'}</Button>
                         </FormShare>
                     </ShareMe>
                     <Posts>
+                        {posts.length > 0 ?
+                        <PostComponent username={posts[0].username} picture={posts[0].picture} articleUrl={posts[0].articleUrl} trends={posts[0].trends_array} likes={posts[0].num_likes} post={posts[0].post} id={posts[0].id} />:<></>}
 
                     </Posts>
 
@@ -101,7 +115,6 @@ const Timeline = styled.div`
     padding-top: 78px;
     width:611px;
     height:100%;
-    background-color:yellow;
     font-family: 'Oswald', sans-serif;
     font-weight:700;
     font-size:43px;
@@ -122,13 +135,20 @@ const ShareMe = styled.div`
 `
 
 const Imagem = styled.div`
+    box-sizing: border-box;
     height:50px;
+    width:50px;
+    min-width: 50px;
+    background-color: blue;
+    overflow: hidden;
     border-radius:100%;
-    img{
-        margin-top:16px;
-        margin-left:18px;
+    margin-top:16px;
+    margin-left:18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img{    
         height:100%;
-        border-radius:100%;
     }
 `
 
@@ -224,3 +244,4 @@ const TrendStyled = styled.div`
         cursor: pointer;
     }
 `
+

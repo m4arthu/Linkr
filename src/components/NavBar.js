@@ -75,7 +75,7 @@ export default function NavBar({click, setClick}) {
         if (users !== '') {
             return(
                 <DivBuscas>
-                    {users.map(user => <div><img src={user.picture} alt=''/> {user.username}</div> )}
+                    {users.map(user => <div onClick={() => navigate(`/user/${user.id}`)}><img src={user.picture} alt=''/> {user.username}</div> )}
                 </DivBuscas>
             )
         }

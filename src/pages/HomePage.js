@@ -3,111 +3,77 @@ import NavBar from "../components/NavBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import PostComponent from "../components/PostComponent";
 
-export default function TimelinePage({click, setClick}) {
+export default function TimelinePage({ click, setClick }) {
     const data = JSON.parse(localStorage.getItem("userData"));
     const [url, setUrl] = useState();
     const [text, setText] = useState();
-    const [clicked,setClicked] = useState(false);
+    const [clicked, setClicked] = useState(false);
     const [trends, setTrends] = useState([]);
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const token = localStorage.getItem('token')
 
-
-    const [metaData, setMetaData] = useState({
-        title: '',
-        description: '',
-        image: '',
-        url: ''
-      });
-
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
-             .then(res => setTrends(res.data))
-             .catch(err => alert(err.response.data)) 
+            .then(res => setTrends(res.data))
+            .catch(err => alert(err.response.data))
     }, []);
 
-    useEffect(()=>{
-        axios.get(`${process.env.REACT_APP_API_URL}/timeline`,{ headers: { Authorization: `Bearer ${token}` }})
-             .then((res) => {
-                setPosts(res.data)   
-                setMetaData({
-                    title: '',
-                    description: '',
-                    image: '',
-                    url:  res.data[0].articleUrl
-                  })               
-            })
-             .catch((err)=> {
-                alert(err.response.data)})  
-    },[token]);
     useEffect(() => {
-        const fetchMetaData = async () => {
-          try {
-            const response = '' //await LinkPreview.getPreview(metaData.url);
-            console.log(response)
-    
-            setMetaData({
-              ...metaData,
-              title: response.title || '',
-              description: response.description || '',
-              image: response.images.length > 0 ? response.images[0] : '',
-            });
-          } catch (error) {
-            console.error('Erro ao buscar metadados:', error);
-          }
-        };
-    
-        fetchMetaData();
-        
-      }, [metaData]);
-    /* console.log(posts)
-    console.log(trends); */
+        axios.get(`${process.env.REACT_APP_API_URL}/timeline`, { headers: { Authorization: `Bearer ${token}` } })
+            .then((res) => {
+                setPosts(res.data)
+            })
+            .catch((err) => {
+                alert(err.response.data)
+            })
+    }, [token]);
 
-
-    function publish(e){
+    function publish(e) {
         e.preventDefault();
 
         setClicked(true);
-        
-        const body = {url,text}
 
-        axios.post(`${process.env.REACT_APP_API_URL}/timeline`,body,{ headers: { Authorization: `Bearer ${token}` }})
-            .then((res)=>{
+        const body = { url, text }
+
+        axios.post(`${process.env.REACT_APP_API_URL}/timeline`, body, { headers: { Authorization: `Bearer ${token}` } })
+            .then((res) => {
                 setClicked(false);
                 setUrl('')
                 setText('')
             })
-            .catch((err)=>{
+            .catch((err) => {
                 setClicked(false);
                 alert('Houve um erro ao publicar seu link')
-                
+
             })
     }
 
     function TrendsContainer() {
         if (trends.length === 0) {
-            return(
+            return (
                 <TrendStyled>
                     <h1>trending</h1>
                 </TrendStyled>
             )
         } else {
-            return(
+            return (
                 <TrendStyled>
                     <h1>trending</h1>
                     <div>
-                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend}`, {state: {id: trend.id}})}># {trend.trend}</p>)}
+                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend}`, { state: { id: trend.id } })}># {trend.trend}</p>)}
                     </div>
                 </TrendStyled>
             )
         }
     }
+    console.log(posts)
 
     return (
         <>
-            <NavBar click={click} setClick={setClick}/>
+            <NavBar click={click} setClick={setClick} />
             <ContainerHome onClick={() => setClick(false)}>
                 <Timeline>
                     <h1>timeline</h1>
@@ -116,35 +82,17 @@ export default function TimelinePage({click, setClick}) {
                             <img src={data.picture} alt="Imagem de perfil"></img>
                         </Imagem>
 
-                        <FormShare onSubmit={(e)=>{publish(e)}}>
+                        <FormShare onSubmit={(e) => { publish(e) }}>
                             <label htmlFor="url">What are you going to share today?</label>
                             <input disabled={clicked} type="url" id="url" placeholder='http://...' value={url} onChange={(e) => { setUrl(e.target.value) }} required />
                             <input disabled={clicked} type="text" placeholder='Awesome article about #javascript' value={text} onChange={(e) => { setText(e.target.value) }} required />
-                            <Button disabled={clicked} type='submit'>{clicked ? 'Publishing...': 'Publish'}</Button>
+                            <Button disabled={clicked} type='submit'>{clicked ? 'Publishing...' : 'Publish'}</Button>
                         </FormShare>
                     </ShareMe>
                     <Posts>
-                        {posts.length>0?
-                    <PostContainer>
-                                <div className="direita">
-                                            <img src={posts[0].picture} alt=""/>
-                                            <div>
-                                                <ion-icon name="heart-outline"></ion-icon>
-                                                <span>0 likes</span>
-                                            </div>
-                                        </div>
-                                        <div className="esquerda">
-                                            <h2>{posts[0].username}</h2>
-                                            <h3>{posts[0].post}</h3>
-                                            <div className="card">
-                                                <h2>{metaData.title}</h2>
-                                                {metaData.image && <img src={metaData.image} alt="Imagem da Matéria" />}
-                                                <p>{metaData.description}</p>
-                                                <a href={metaData.url}>Leia mais</a>
-                                            </div>
+                        {posts.length > 0 ?
+                        <PostComponent username={posts[0].username} picture={posts[0].picture} articleUrl={posts[0].articleUrl} trends={posts[0].trends_array} likes={posts[0].num_likes} post={posts[0].post} id={posts[0].id} />:<></>}
 
-                                </div>    
-                            </PostContainer>:<></>}
                     </Posts>
 
                 </Timeline>
@@ -290,52 +238,3 @@ const TrendStyled = styled.div`
     }
 `
 
-const PostContainer = styled.li`
-    font-family: 'Lato', sans-serif;
-    background-color: #171717;
-    border-radius: 16px;
-    padding: 15px;
-    display: flex;
-    gap: 20px;
-    .direita{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-        img{
-            width: 50px;
-            height: 50px;
-            border-radius: 100%;
-        }
-        div{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 10px;
-            font-weight: 400;
-            gap: 2px;
-            ion-icon{
-                font-size: 20px;
-            }
-        }
-    }
-    .esquerda{
-        display: flex;
-        flex-direction: column;
-        gap: 7px;
-        :nth-child(1){
-            font-weight: 400;
-            font-size: 20px;
-        }
-        :nth-child(2){
-            font-weight: 400;
-            font-size: 17px;
-            color: #C6C6C6;
-            span{
-                color: white;
-                font-weight: 600;
-                font-size: 17px;
-            }
-        }
-    }
-`

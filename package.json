@@ -3,14 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@dhaiwat10/react-link-preview": "^1.15.0",
     "axios": "^1.4.0",
+    "cheerio": "^1.0.0-rc.12",
     "env-cmd": "^10.1.0",
+    "install": "^0.13.0",
+    "link-preview-js": "^3.0.5",
+    "npm": "^9.8.1",
     "react": "^18.2.0",
+    "react-bookmark": "^0.8.2",
     "react-debounce-input": "^3.3.0",
     "react-dom": "^18.2.0",
+    "react-link-previewer": "^1.0.8",
     "react-router-dom": "^6.15.0",
     "react-scripts": "^5.0.0",
-    "styled-components": "6.0.7"
+    "styled-components": "6.0.7",
+    "url-metadata": "^3.0.2"
   },
   "scripts": {
     "start": "react-scripts start",

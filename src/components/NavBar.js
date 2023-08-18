@@ -84,7 +84,7 @@ export default function NavBar() {
 
     return (
         <ContainerGeral>
-            <h1 onClick={() => navigate('/timeline')}>linkr</h1>
+            <h1 onClick={() => navigate('/home')}>linkr</h1>
             <div className="search">
                 <DebounceInput
                     debounceTimeout={300}

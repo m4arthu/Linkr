@@ -1,13 +1,24 @@
 import { styled } from "styled-components";
 import NavBar from "../components/NavBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function TimelinePage() {
     const data = JSON.parse(localStorage.getItem("userData"));
     const [url, setUrl] = useState();
     const [text, setText] = useState();
     const [clicked,setClicked] = useState(false);
+    const [trends, setTrends] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
+             .then(res => setTrends(res.data))
+             .catch(err => alert(err.response.data));
+    }, []);
+
+    console.log(trends);
 
     function publish(e){
         e.preventDefault();
@@ -28,6 +39,25 @@ export default function TimelinePage() {
                 alert('Houve um erro ao publicar seu link')
                 
             })
+    }
+
+    function TrendsContainer() {
+        if (trends.length == 0) {
+            return(
+                <TrendStyled>
+                    <h1>trending</h1>
+                </TrendStyled>
+            )
+        } else {
+            return(
+                <TrendStyled>
+                    <h1>trending</h1>
+                    <div>
+                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend}`, {state: {id: trend.id}})}># {trend.trend}</p>)}
+                    </div>
+                </TrendStyled>
+            )
+        }
     }
 
     return (
@@ -53,6 +83,7 @@ export default function TimelinePage() {
                     </Posts>
 
                 </Timeline>
+                <TrendsContainer />
 
             </ContainerHome>
         </>
@@ -60,10 +91,10 @@ export default function TimelinePage() {
 }
 
 const ContainerHome = styled.div`
-    background-color: #333333;
     height:100vh;
     display: flex;
     justify-content:center;
+    gap: 15px;
 `
 
 const Timeline = styled.div`
@@ -161,4 +192,35 @@ const Posts = styled.ul`
     width:100%;
     display:flex;
     flex-direction:column;
+`
+
+const TrendStyled = styled.div`
+    width: 301px;
+    background-color: #171717;
+    color: white;
+    border-radius: 16px;
+    margin-top: 160px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    h1 {
+        font-family: 'Passion One', cursive;
+        font-size: 27px;
+        margin-left: 15px;
+    }
+    div{
+        padding: 15px;
+        border-top: 1px solid #484848;
+        margin-top: 15px;
+    }
+    p {
+        font-family: Lato;
+        font-size: 19px;
+        font-weight: 700;
+        line-height: 23px;
+        letter-spacing: 0.05em;
+    }
+    p:hover{
+        text-decoration: underline;
+        cursor: pointer;
+    }
 `

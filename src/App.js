@@ -4,6 +4,7 @@ import { RegisterPage } from "./pages/registerPage.js";
 import { AuthProvider } from "./contexts/authContext.js";
 /* import axios from "axios"; */
 import HomePage from "./pages/HomePage.js";
+import TrendPage from "./pages/TrendPage.js";
 
 function App() {
   /* const  isLoged = () => {
@@ -22,6 +23,7 @@ function App() {
           <Route exact path="/" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/home" element={<HomePage />} />
+          <Route path="/hashtag/:hashtag" element={<TrendPage />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

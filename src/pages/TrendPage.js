@@ -27,14 +27,14 @@ export default function TimelinePage({click, setClick}) {
              .then(res => setPosts(res.data))
              .catch(err => alert(err.response.data));
 
-    }, []);
+    }, [id]);
 
     console.log(trends);
     console.log(posts);
 
 
     function TrendsContainer() {
-        if (trends.length == 0) {
+        if (trends.length === 0) {
             return(
                 <TrendStyled>
                     <h1>trending</h1>
@@ -62,7 +62,7 @@ export default function TimelinePage({click, setClick}) {
                         {posts.map(post => 
                             <PostContainer>
                                     <div className="direita">
-                                        <img src={post.picture} />
+                                        <img src={post.picture} alt=""/>
                                         <div>
                                             <ion-icon name="heart-outline"></ion-icon>
                                             <span>{post.num_likes} likes</span>

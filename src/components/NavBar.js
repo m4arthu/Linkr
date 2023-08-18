@@ -4,10 +4,9 @@ import { styled } from "styled-components"
 import axios from "axios";
 import { DebounceInput } from "react-debounce-input";
 
-export default function NavBar() {
+export default function NavBar({click, setClick}) {
 
     const data = JSON.parse(localStorage.getItem("userData"));
-    let [click, setClick] = useState(false);
     let [users, setUsers] = useState('');
     let text = '';
 
@@ -82,8 +81,14 @@ export default function NavBar() {
         }
     }
 
+    function logClose(){
+        if (click == true) {
+            setClick(false);
+        }
+    }
+
     return (
-        <ContainerGeral>
+        <ContainerGeral onClick={logClose}>
             <h1 onClick={() => navigate('/home')}>linkr</h1>
             <div className="search">
                 <DebounceInput

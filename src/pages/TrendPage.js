@@ -5,7 +5,7 @@ import axios from "axios";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import urlMetadata from "url-metadata";
 
-export default function TimelinePage() {
+export default function TimelinePage({click, setClick}) {
     const data = JSON.parse(localStorage.getItem("userData"));
     const [trends, setTrends] = useState([]);
     const [posts, setPosts] = useState([]);
@@ -54,8 +54,8 @@ export default function TimelinePage() {
 
     return (
         <>
-            <NavBar />
-            <ContainerHome>
+            <NavBar click={click} setClick={setClick}/>
+            <ContainerHome onClick={() => setClick(false)}>
                 <Timeline>
                     <h1># {hashtag}</h1>
                     <Posts>

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export default function TimelinePage() {
+export default function TimelinePage({click, setClick}) {
     const data = JSON.parse(localStorage.getItem("userData"));
     const [url, setUrl] = useState();
     const [text, setText] = useState();
@@ -62,8 +62,8 @@ export default function TimelinePage() {
 
     return (
         <>
-            <NavBar />
-            <ContainerHome>
+            <NavBar click={click} setClick={setClick}/>
+            <ContainerHome onClick={() => setClick(false)}>
                 <Timeline>
                     <h1>timeline</h1>
                     <ShareMe>

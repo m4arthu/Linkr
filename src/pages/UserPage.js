@@ -8,8 +8,7 @@ import PostComponent from "../components/PostComponent";
 export default function UserPage() {
     const data = JSON.parse(localStorage.getItem("userData"));
     const {id} = useParams()
-    const [url, setUrl] = useState();
-    const [text, setText] = useState();
+    const [refresh, setRefresh] = useState();
     const [clicked,setClicked] = useState(false);
     const [trends, setTrends] = useState([]);
     const [posts, setPosts] = useState([]);
@@ -28,30 +27,8 @@ export default function UserPage() {
                 setUsername(res.data.username)
             })
             .catch(console.log)
-    }, []);
-
-    console.log(posts);
-
-    function publish(e){
-        e.preventDefault();
-
-        setClicked(true);
-        const token = localStorage.getItem("token");
-        
-        const body = {url,text}
-
-        axios.post(`${process.env.REACT_APP_API_URL}/timeline`,body,{ headers: { Authorization: `Bearer ${token}` }})
-            .then((res)=>{
-                setClicked(false);
-                setUrl('')
-                setText('')
-            })
-            .catch((err)=>{
-                setClicked(false);
-                alert('Houve um erro ao publicar seu link')
-                
-            })
-    }
+            .finally(() => setRefresh(false))
+    }, [refresh]);
 
     function TrendsContainer() {
         if (trends.length == 0) {
@@ -71,7 +48,6 @@ export default function UserPage() {
             )
         }
     }
-
     return (
         <>
             <NavBar click={clicked} setClick={setClicked} />
@@ -81,7 +57,7 @@ export default function UserPage() {
                     <Posts>
                         {posts.map(x => {
                             return(
-                                <PostComponent username={x.username} picture={x.picture} articleUrl={x.articleUrl} trends={x.trends_array} likes={x.num_likes} post={x.post} id={x.id}/>
+                                <PostComponent setRefresh={setRefresh} userId={x.userId} username={x.username} picture={x.picture} articleUrl={x.articleUrl} trends={x.trends_array} likes={x.num_likes} post={x.post} id={x.id}/>
                         )})}
                     </Posts>
 

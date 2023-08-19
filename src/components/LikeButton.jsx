@@ -2,16 +2,26 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { FiHeart } from 'react-icons/fi'
 import { styled } from 'styled-components'
+import 'react-tooltip/dist/react-tooltip.css'
+import { Tooltip } from 'react-tooltip'
 
-export default function LikeButton({ posts }) {
+export default function LikeButton({ props }) {
   const [isLiked, setIsLiked] = useState(false)
   const [countLike, setCountLike] = useState()
+  const [likedNames, setLikedNames] = useState()
   const token = localStorage.getItem('token')
+  const [data, setData] = useState()
 
-  const postId = posts
+  console.log('isLiked', isLiked)
 
-  console.log(`postID`, postId)
-  console.log(`token`, token)
+  console.log('props', props.id)
+
+  console.log('dados que estao vindo da requisicao', data)
+  let nomesDequemDeuLike = data.likedByNames
+
+  console.log(nomesDequemDeuLike)
+
+  const postId = props.id
 
   useEffect(() => {
     axios
@@ -20,7 +30,11 @@ export default function LikeButton({ posts }) {
       })
 
       .then(response => {
+        setData(response.data)
         setCountLike(response.data.likes)
+        setLikedNames(response.data.likedByNames)
+
+        console.log('reposta da useEffect', response)
       })
       .catch(error => {
         console.error('Erro ao obter a contagem de likes:', error)
@@ -37,14 +51,22 @@ export default function LikeButton({ posts }) {
         }
       )
       .then(response => {
-        console.log(`response`, response)
-        setIsLiked(!isLiked)
+        setIsLiked(prevIsLiked => !prevIsLiked)
         handleCountLike(!isLiked)
+        console.log('reposta da handleLiked', response.data)
+        localStorage.setItem(`isLiked_${postId}`, String(!isLiked))
       })
       .catch(error => {
         console.error('Erro ao enviar o like:', error)
       })
   }
+
+  useEffect(() => {
+    const storedIsLiked = localStorage.getItem(`isLiked_${postId}`)
+    if (storedIsLiked !== null) {
+      setIsLiked(storedIsLiked === 'true')
+    }
+  }, [])
 
   function handleCountLike(updatedIsLiked) {
     setCountLike(updatedIsLiked ? countLike + 1 : countLike - 1)
@@ -53,8 +75,11 @@ export default function LikeButton({ posts }) {
   return (
     <div>
       <StyledHeartIcon isLiked={isLiked} onClick={handleLiked} />
-      <span onClick={handleCountLike}>{countLike} Likes</span>
-      {/* <span>0 likes</span> */}
+      <span id="my-anchor-element">{countLike} Likes</span>
+      <Tooltip
+        anchorSelect="#my-anchor-element"
+        content={`${likedNames} Fulano, Beltrano and other x people`}
+      />
     </div>
   )
 }

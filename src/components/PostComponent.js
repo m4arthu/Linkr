@@ -2,6 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { styled } from "styled-components"
 import { load } from "cheerio"
+import LikeButton from "./LikeButton"
 export default function PostComponent(props) {
     console.log(props)
     const [meta, setMeta] = useState({})
@@ -32,10 +33,7 @@ export default function PostComponent(props) {
 
             <div className="direita">
                 <img src={props.picture} alt="" />
-                <div>
-                    <ion-icon name="heart-outline"></ion-icon>
-                    <span>0 likes</span>
-                </div>
+              <LikeButton props={props}/>
             </div>
             <div className="esquerda">
                 <h2>{props.username}</h2>

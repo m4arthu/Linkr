@@ -3,7 +3,6 @@ import NavBar from "../components/NavBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import urlMetadata from "url-metadata";
 
 export default function TimelinePage({click, setClick}) {
     const data = JSON.parse(localStorage.getItem("userData"));
@@ -45,7 +44,7 @@ export default function TimelinePage({click, setClick}) {
                 <TrendStyled>
                     <h1>trending</h1>
                     <div>
-                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend}`, {state: {id: trend.id}})}># {trend.trend}</p>)}
+                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend.slice(1)}`, {state: {id: trend.id}})}>{trend.trend}</p>)}
                     </div>
                 </TrendStyled>
             )
@@ -70,7 +69,7 @@ export default function TimelinePage({click, setClick}) {
                                     </div>
                                     <div className="esquerda">
                                         <h2>{post.username}</h2>
-                                        <h3>{post.post} {post.trends_array.trends.map(trend => <span>#{trend} </span>)}</h3>
+                                        <h3>{post.post} {post.trends_array.trends.map(trend => <span>{trend} </span>)}</h3>
                                     </div>
                             </PostContainer>
                         )}

@@ -10,9 +10,12 @@ export default function LikeButton({ posts }) {
 
   const postId = posts
 
+  console.log(`postID`, postId)
+  console.log(`token`, token)
+
   useEffect(() => {
     axios
-      .get(`http://localhost:5005/like/${postId}`, {
+      .get(`${process.env.REACT_APP_API_URL}/like/${postId}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
 
@@ -25,8 +28,22 @@ export default function LikeButton({ posts }) {
   }, [])
 
   function handleLiked() {
-    setIsLiked(!isLiked)
-    handleCountLike(!isLiked)
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/post/${postId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      )
+      .then(response => {
+        console.log(`response`, response)
+        setIsLiked(!isLiked)
+        handleCountLike(!isLiked)
+      })
+      .catch(error => {
+        console.error('Erro ao enviar o like:', error)
+      })
   }
 
   function handleCountLike(updatedIsLiked) {

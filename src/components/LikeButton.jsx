@@ -17,9 +17,6 @@ export default function LikeButton({ props }) {
   console.log('props', props.id)
 
   console.log('dados que estao vindo da requisicao', data)
-  let nomesDequemDeuLike = data.likedByNames
-
-  console.log(nomesDequemDeuLike)
 
   const postId = props.id
 

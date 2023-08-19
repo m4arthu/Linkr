@@ -20,7 +20,8 @@ export default function PostComponent(props) {
     console.log(meta)
 
     useEffect(() => {
-        axios.get(`https://cors-anywhere.herokuapp.com/${(props.articleUrl).slice(1, -1)}`)
+        console.log(props.articleUrl)
+        axios.get(`https://jsonlink.io/api/extract?ur1=${(props.articleUrl)}`)
             .then(res => {
                 parseHTML(res.data)
             })

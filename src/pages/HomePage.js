@@ -79,7 +79,7 @@ export default function TimelinePage({ click, setClick }) {
                     <h1>timeline</h1>
                     <ShareMe>
                         <Imagem>
-                        <img src={data.picture} alt="Imagem de perfil"></img>
+                            <img src={data.picture} alt="Imagem de perfil"></img>
 
                         </Imagem>
 
@@ -91,12 +91,13 @@ export default function TimelinePage({ click, setClick }) {
                         </FormShare>
                     </ShareMe>
                     <Posts>
-                        {posts.map(x => {
-                           return <PostComponent userId={x.userId} username={x.username} picture={x.picture} articleUrl={x.articleUrl} trends={x.trends_array} likes={x.num_likes} post={x.post} id={x.id} />  
-                        } 
-                        )}
-                     
-
+                        {posts.length > 0 ?
+                            posts.map(post => {
+                                return (
+                                    <PostComponent userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} id={post.id} />
+                                )
+                            })
+                            : <></>}
                     </Posts>
 
                 </Timeline>

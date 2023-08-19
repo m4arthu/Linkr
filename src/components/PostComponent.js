@@ -27,7 +27,7 @@ export default function PostComponent(props){
    }, [])
 
     return (
-        <PostContainer>
+        <PostContainer >
 
         </PostContainer>
     )

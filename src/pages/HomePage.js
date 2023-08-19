@@ -91,8 +91,11 @@ export default function TimelinePage({ click, setClick }) {
                         </FormShare>
                     </ShareMe>
                     <Posts>
-                        {posts.length > 0 ?
-                        <PostComponent username={posts[0].username} picture={posts[0].picture} articleUrl={posts[0].articleUrl} trends={posts[0].trends_array} likes={posts[0].num_likes} post={posts[0].post} id={posts[0].id} />:<></>}
+                        {posts.map(x => {
+                           return <PostComponent userId={x.userId} username={x.username} picture={x.picture} articleUrl={x.articleUrl} trends={x.trends_array} likes={x.num_likes} post={x.post} id={x.id} />  
+                        } 
+                        )}
+                     
 
                     </Posts>
 

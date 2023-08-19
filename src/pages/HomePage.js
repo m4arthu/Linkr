@@ -93,7 +93,7 @@ export default function TimelinePage({ click, setClick }) {
                         {posts.length > 0 ?
                             posts.map(post => {
                                 return (
-                                    <PostComponent username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
+                                    <PostComponent userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
                                 )
                             })
                             : <>There are no posts yet</>}

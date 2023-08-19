@@ -2,7 +2,6 @@ import axios from "axios"
 import { useEffect, useRef, useState } from "react"
 import { styled } from "styled-components"
 import { load } from "cheerio"
-
 import urlMetadata from "url-metadata"
 import { useNavigate } from "react-router-dom"
 
@@ -10,22 +9,6 @@ export default function PostComponent(props) {
     const [editor, setEditor] = useState(false)
     const [newPost, setNewPost] = useState(props.post)
     const [meta, setMeta] = useState({})
-
-
-    const urlMetadata = require('url-metadata')
-
-    urlMetadata(`localhost:5005/proxy?url=www.npmjs.com/package/react-icons`)
-        .then((metadata) => {
-            console.log('fetched metadata:')
-            console.log(metadata)
-            // do stuff with the metadata
-        },
-            (err) => {
-                console.log(err)
-            })
-
-    /* const parseHTML = (html) => {
-
     const [disabled, setDisabled] = useState(false)
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
@@ -43,13 +26,20 @@ export default function PostComponent(props) {
             title, description, image
         })
 
-    } */
+    }
     /* console.log(meta) */
 
-    /* useEffect(() => {
-
-    }
     useEffect(() => {
+        urlMetadata(`localhost:5005/proxy?url=www.npmjs.com/package/react-icons`)
+        .then((metadata) => {
+            console.log('fetched metadata:')
+            console.log(metadata)
+            // do stuff with the metadata
+        },
+            (err) => {
+                console.log(err)
+            })
+
         console.log(props.articleUrl)
         axios.get(`https://jsonlink.io/api/extract?ur1=${(props.articleUrl)}`)
             .then(res => {
@@ -57,9 +47,7 @@ export default function PostComponent(props) {
             })
             .catch(console.log)
 
-    }, []) */
 
-        
         reference.current?.focus()
         reference.current?.select()
     }, [editor])

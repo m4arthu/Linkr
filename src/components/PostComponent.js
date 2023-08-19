@@ -2,7 +2,8 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { styled } from "styled-components"
 import { load } from "cheerio"
-export default function PostComponent(props){
+export default function PostComponent(props) {
+    console.log(props)
     const [meta, setMeta] = useState({})
 
     const parseHTML = (html) => {
@@ -15,19 +16,38 @@ export default function PostComponent(props){
         setMeta({
             title, description, image
         })
-        }
-        console.log(meta)
+    }
+    console.log(meta)
 
-   useEffect(() => {
-    axios.get(`https://cors-anywhere.herokuapp.com/${(props.articleUrl).slice(1, -1)}`)
-        .then(res =>{
-            parseHTML(res.data)
-        })
-        .catch(console.log)
-   }, [])
+    useEffect(() => {
+        axios.get(`https://cors-anywhere.herokuapp.com/${(props.articleUrl).slice(1, -1)}`)
+            .then(res => {
+                parseHTML(res.data)
+            })
+            .catch(console.log)
+    }, [])
 
     return (
         <PostContainer >
+
+            <div className="direita">
+                <img src={props.picture} alt="" />
+                <div>
+                    <ion-icon name="heart-outline"></ion-icon>
+                    <span>0 likes</span>
+                </div>
+            </div>
+            <div className="esquerda">
+                <h2>{props.username}</h2>
+                <h3>{props.post}</h3>
+                <div className="card">
+                    <h2>{meta.title}</h2>
+                    {meta.image && <img src={meta.image} alt="Imagem da Matéria" />}
+                    <p>{meta.description}</p>
+                    <a href={props.articleUrl}>Leia mais</a>
+                </div>
+
+            </div>
 
         </PostContainer>
     )
@@ -43,11 +63,56 @@ const Imagem = styled.div`
         border-radius:100%;
     }
 `
-const PostContainer = styled.div`
-    display:flex;
-    margin-top:43px;
-    border-radius:16px;
-    width:100%;
-    height:276px;
+
+
+const PostContainer = styled.li`
+    font-family: 'Lato', sans-serif;
     background-color: #171717;
+    margin-top:43px;
+    height:276px;
+    border-radius: 16px;
+    padding: 15px;
+    display: flex;
+    gap: 20px;
+    .direita{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        img{
+            width: 50px;
+            height: 50px;
+            border-radius: 100%;
+        }
+        div{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            font-weight: 400;
+            gap: 2px;
+            ion-icon{
+                font-size: 20px;
+            }
+        }
+    }
+    .esquerda{
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        :nth-child(1){
+            font-weight: 400;
+            font-size: 20px;
+        }
+        :nth-child(2){
+            font-weight: 400;
+            font-size: 17px;
+            color: #C6C6C6;
+            span{
+                color: white;
+                font-weight: 600;
+                font-size: 17px;
+            }
+        }
+    }
 `

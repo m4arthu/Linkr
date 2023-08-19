@@ -2,17 +2,37 @@ import axios from "axios"
 import { useEffect, useRef, useState } from "react"
 import { styled } from "styled-components"
 import { load } from "cheerio"
+
+import urlMetadata from "url-metadata"
 import { useNavigate } from "react-router-dom"
+
 export default function PostComponent(props) {
     const [editor, setEditor] = useState(false)
     const [newPost, setNewPost] = useState(props.post)
     const [meta, setMeta] = useState({})
+
+
+    const urlMetadata = require('url-metadata')
+
+    urlMetadata(`localhost:5005/proxy?url=www.npmjs.com/package/react-icons`)
+        .then((metadata) => {
+            console.log('fetched metadata:')
+            console.log(metadata)
+            // do stuff with the metadata
+        },
+            (err) => {
+                console.log(err)
+            })
+
+    /* const parseHTML = (html) => {
+
     const [disabled, setDisabled] = useState(false)
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
     const {id} = JSON.parse(localStorage.getItem('userData'))
     const reference = useRef()
     const parseHTML = (html) => {
+
         const $ = load(html);
 
         const title = $('meta[property="og:title"]').attr('content');
@@ -22,6 +42,12 @@ export default function PostComponent(props) {
         setMeta({
             title, description, image
         })
+
+    } */
+    /* console.log(meta) */
+
+    /* useEffect(() => {
+
     }
     useEffect(() => {
         console.log(props.articleUrl)
@@ -30,6 +56,9 @@ export default function PostComponent(props) {
                 parseHTML(res.data)
             })
             .catch(console.log)
+
+    }, []) */
+
         
         reference.current?.focus()
         reference.current?.select()
@@ -71,7 +100,7 @@ export default function PostComponent(props) {
                 </Imagem>
                 <div>
                     <ion-icon name="heart-outline"></ion-icon>
-                    <span>0 likes</span>
+                    <span>{props.num_likes} likes</span>
                 </div>
             </div>
             <div className="esquerda">
@@ -81,9 +110,10 @@ export default function PostComponent(props) {
                         <SCinput ref={reference} disabled={disabled} defaultValue={props.post} onKeyDown={e => (e.keyCode === 13 && !e.shiftKey? handleEnter(e) : (e.keyCode === 27 ? resetFunction() : ''))} onChange={e => setNewPost(e.target.value)}/>
                     </SCform>) : (<h3>{props.post}</h3>)}
                 <div className="card">
-                    <h2>{meta.title}</h2> 
-                    {meta.image && <img src={meta.image} alt="Imagem da Matéria" />}
-                    <p>{meta.description}</p>
+                    <h2>{'titulo'/* meta.title */}</h2>
+                    {'imagem'/* meta.image && <img src={meta.image} alt="Imagem da Matéria" /> */}
+                    <p>{'descrição'/* meta.description */}</p>
+
                     <a href={props.articleUrl}>Leia mais</a>
                 </div>
             {id === props.userId ?

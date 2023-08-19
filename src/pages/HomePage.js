@@ -27,7 +27,7 @@ export default function TimelinePage({ click, setClick }) {
                 setPosts(res.data)
             })
             .catch((err) => {
-                alert(err.response.data)
+                alert("An error occured while trying to fetch the posts, please refresh the page")
             })
     }, [token]);
 
@@ -63,13 +63,12 @@ export default function TimelinePage({ click, setClick }) {
                 <TrendStyled>
                     <h1>trending</h1>
                     <div>
-                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend}`, { state: { id: trend.id } })}># {trend.trend}</p>)}
+                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend.slice(1)}`, { state: { id: trend.id } })}>{trend.trend}</p>)}
                     </div>
                 </TrendStyled>
             )
         }
     }
-    console.log(posts)
 
     return (
         <>
@@ -94,10 +93,10 @@ export default function TimelinePage({ click, setClick }) {
                         {posts.length > 0 ?
                             posts.map(post => {
                                 return (
-                                    <PostComponent userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} id={post.id} />
+                                    <PostComponent username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
                                 )
                             })
-                            : <></>}
+                            : <>There are no posts yet</>}
                     </Posts>
 
                 </Timeline>
@@ -214,6 +213,7 @@ const Button = styled.button`
 const Posts = styled.ul`
     height:100%;
     width:100%;
+    margin-top:30px;
     display:flex;
     flex-direction:column;
 `

@@ -24,7 +24,6 @@ export default function LikeButton({ props }) {
       .then(response => {
         setData(response.data)
         setCountLike(response.data.likes)
-        console.log('oque esta vindo do banco', response.data)
 
         setLikedNamesMap(prevMap => ({
           ...prevMap,
@@ -48,11 +47,9 @@ export default function LikeButton({ props }) {
       .then(response => {
         setIsLiked(prevIsLiked => !prevIsLiked)
         handleCountLike(!isLiked)
-        console.log('reposta da handleLiked', response.data)
 
         localStorage.setItem(`isLiked_${postId}`, String(!isLiked))
 
-        // Atualiza o mapa de nomes de acordo com a ação de curtir/descurtir
         setLikedNamesMap(prevMap => ({
           ...prevMap,
           [postId]: !isLiked

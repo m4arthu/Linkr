@@ -7,6 +7,7 @@ import PostComponent from "../components/PostComponent";
 
 export default function TimelinePage({ click, setClick }) {
     const data = JSON.parse(localStorage.getItem("userData"));
+    const picture = data ? data.picture : ''
     const [url, setUrl] = useState();
     const [text, setText] = useState();
     const [refresh, setRefresh] = useState();
@@ -17,6 +18,8 @@ export default function TimelinePage({ click, setClick }) {
     const token = localStorage.getItem('token')
     
     useEffect(() => {
+    if (!token) return navigate('/')
+
         axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
             .then(res => setTrends(res.data))
             .catch(err => alert(err.response.data))
@@ -69,7 +72,6 @@ export default function TimelinePage({ click, setClick }) {
             )
         }
     }
-
     return (
         <>
             <NavBar click={click} setClick={setClick} />
@@ -78,7 +80,7 @@ export default function TimelinePage({ click, setClick }) {
                     <h1>timeline</h1>
                     <ShareMe>
                         <Imagem>
-                            <img src={data.picture} alt="Imagem de perfil"></img>
+                            <img src={picture} alt="Imagem de perfil"></img>
 
                         </Imagem>
 

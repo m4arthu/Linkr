@@ -68,7 +68,7 @@ export default function NavBar({click, setClick}) {
                 <div className="user" onClick={clickChange}>
                     <ion-icon name="chevron-down-outline"></ion-icon>
                     <Imagem>
-                            <img src={data.picture} alt="ImagemPerfil" />
+                            <img src={data ? data.picture : ''} alt="ImagemPerfil" />
                     </Imagem>
                 </div>
             )

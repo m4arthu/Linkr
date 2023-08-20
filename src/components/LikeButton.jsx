@@ -12,13 +12,39 @@ export default function LikeButton({ props }) {
   const token = localStorage.getItem('token')
   const [data, setData] = useState()
 
-  console.log('isLiked', isLiked)
+  const postId = props.id
+  const username = props.username
+  console.log('props', props)
 
-  console.log('props', props.id)
+  // const listaDeNomesFake = 'mario, caio, joão, rafael'
 
   console.log('dados que estao vindo da requisicao', data)
 
-  const postId = props.id
+  let displayText = ''
+
+  if (likedNames && likedNames.trim() !== '') {
+    const namesArray = likedNames.split(',')
+    const isUserLiked = namesArray.includes(username)
+
+    const processedNames = namesArray.filter(name => name !== username)
+
+    if (isUserLiked) {
+      processedNames.unshift('você')
+    }
+
+    if (processedNames.length === 1) {
+      displayText = processedNames[0]
+    } else if (processedNames.length === 2) {
+      displayText = `${processedNames.join(', ')}`
+    } else if (processedNames.length > 2) {
+      const firstTwoNames = processedNames.slice(0, 2).join(', ')
+      displayText = `${firstTwoNames}, and other ${
+        processedNames.length - 2
+      } people`
+    }
+  } else {
+    displayText = likedNames
+  }
 
   useEffect(() => {
     axios
@@ -30,6 +56,7 @@ export default function LikeButton({ props }) {
         setData(response.data)
         setCountLike(response.data.likes)
         setLikedNames(response.data.likedByNames)
+        // setLikedNames(listaDeNomesFake)
 
         console.log('reposta da useEffect', response)
       })
@@ -52,6 +79,15 @@ export default function LikeButton({ props }) {
         handleCountLike(!isLiked)
         console.log('reposta da handleLiked', response.data)
         localStorage.setItem(`isLiked_${postId}`, String(!isLiked))
+
+        //inicio teste
+        if (!likedNames || likedNames.trim() === '') {
+          setLikedNames(username) // Define o nome do usuário como o único nome
+        } else {
+          setLikedNames(prevLikedNames => `${username}, ${prevLikedNames}`)
+        }
+
+        // fim teste
       })
       .catch(error => {
         console.error('Erro ao enviar o like:', error)
@@ -73,10 +109,7 @@ export default function LikeButton({ props }) {
     <div>
       <StyledHeartIcon isLiked={isLiked} onClick={handleLiked} />
       <span id="my-anchor-element">{countLike} Likes</span>
-      <Tooltip
-        anchorSelect="#my-anchor-element"
-        content={`${likedNames} Fulano, Beltrano and other x people`}
-      />
+      <Tooltip anchorSelect="#my-anchor-element" content={`${displayText} `} />
     </div>
   )
 }

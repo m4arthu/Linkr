@@ -55,20 +55,20 @@ export default function NavBar({click, setClick}) {
                     <div className="user" onClick={clickChange}>
                         <ion-icon name="chevron-up-outline"></ion-icon>
                         <Imagem>
-                            <img src={data.picture} alt="ImagemPerfil" />
+                            <img src={data.picture} alt="ImagemPerfil" data-test="avatar"/>
                         </Imagem>
                     </div>
-                    <div className="logout">
-                        <span onClick={logOut}>Logout</span>
+                    <div className="logout" data-test="menu">
+                        <span onClick={logOut} data-test="logout">Logout</span>
                     </div>
                 </div>
             )
         } else {
             return (
-                <div className="user" onClick={clickChange}>
+                <div className="user" onClick={clickChange} >
                     <ion-icon name="chevron-down-outline"></ion-icon>
                     <Imagem>
-                            <img src={data.picture} alt="ImagemPerfil" />
+                            <img src={data.picture} alt="ImagemPerfil" data-test="avatar"/>
                     </Imagem>
                 </div>
             )
@@ -78,7 +78,7 @@ export default function NavBar({click, setClick}) {
     function Pesquisa() {
         if (users !== '') {
             return(
-                <DivBuscas>
+                <DivBuscas data-test="user-search">
                     {users.map(user => <div onClick={() => navigate(`/user/${user.id}`)}><img src={user.picture} alt=''/> {user.username}</div> )}
                 </DivBuscas>
             )
@@ -95,7 +95,7 @@ export default function NavBar({click, setClick}) {
         <ContainerGeral onClick={logClose}>
             <h1 onClick={() => navigate('/home')}>linkr</h1>
             <div className="search">
-                <DebounceInput
+                <DebounceInput data-test="search"
                     debounceTimeout={300}
                     value={text} 
                     onChange={searchUser}

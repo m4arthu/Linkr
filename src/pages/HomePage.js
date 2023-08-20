@@ -63,7 +63,7 @@ export default function TimelinePage({ click, setClick }) {
                 <TrendStyled>
                     <h1>trending</h1>
                     <div>
-                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend}`, { state: { id: trend.id } })}>{trend.trend}</p>)}
+                        {trends.map(trend => <p key={trend.id} onClick={() => navigate(`/hashtag/${trend.trend}`, { state: { id: trend.id } })}>{trend.trend}</p>)}
                     </div>
                 </TrendStyled>
             )
@@ -93,7 +93,7 @@ export default function TimelinePage({ click, setClick }) {
                         {posts.length > 0 ?
                             posts.map(post => {
                                 return (
-                                    <PostComponent setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
+                                    <PostComponent key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
                                 )
                             })
                             : <>There are no posts yet</>}

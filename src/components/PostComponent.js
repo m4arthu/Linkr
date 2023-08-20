@@ -1,8 +1,6 @@
 import axios from "axios"
 import { useEffect, useRef, useState } from "react"
 import { styled } from "styled-components"
-import { load } from "cheerio"
-import urlMetadata from "url-metadata"
 import { useNavigate } from "react-router-dom"
 import Modal from 'react-modal';
 import { RotatingLines } from "react-loader-spinner"
@@ -19,40 +17,16 @@ export default function PostComponent(props) {
     const {id} = JSON.parse(localStorage.getItem('userData'))
     const reference = useRef()
     const [isOpen, setIsOpen] = useState(false)
-    const parseHTML = (html) => {
 
-        const $ = load(html);
-
-        const title = $('meta[property="og:title"]').attr('content');
-        const description = $('meta[property="og:description"]').attr('content');
-        const image = $('meta[property="og:image"]').attr('content');
-
-        setMeta({
-            title, description, image
-        })
-
-    }
-    /* console.log(meta) */
 
     useEffect(() => {
-        urlMetadata(`localhost:5005/proxy?url=www.npmjs.com/package/react-icons`)
-        .then((metadata) => {
-            console.log('fetched metadata:')
-            console.log(metadata)
-            // do stuff with the metadata
-        },
-            (err) => {
-                console.log(err)
-            })
-
-        console.log(props.articleUrl)
-        axios.get(`https://jsonlink.io/api/extract?ur1=${(props.articleUrl)}`)
+        axios.get(`https://jsonlink.io/api/extract?url=${(props.articleUrl)}`)
             .then(res => {
-                parseHTML(res.data)
+               setMeta(res.data)
+               console.log(res.data)
             })
-            .catch(console.log)
-
-
+            .catch((e)=> {console.log(e)
+            })
         reference.current?.focus()
         reference.current?.select()
     }, [editor])
@@ -134,9 +108,9 @@ export default function PostComponent(props) {
                         <SCinput ref={reference} disabled={disabled} defaultValue={props.post} onKeyDown={e => (e.keyCode === 13 && !e.shiftKey? handleEnter(e) : (e.keyCode === 27 ? resetFunction() : ''))} onChange={e => setNewPost(e.target.value)}/>
                     </SCform>) : (<h3>{props.post}</h3>)}
                 <div className="card">
-                    <h2>{'titulo'/* meta.title */}</h2>
-                    {'imagem'/* meta.image && <img src={meta.image} alt="Imagem da Matéria" /> */}
-                    <p>{'descrição'/* meta.description */}</p>
+                    <h2>{meta.title}</h2>
+                    {<img src={meta.images? meta.images[0]:""}  alt="Imagem da Matéria" />}
+                    <p>{meta.description}</p>
 
                     <a href={props.articleUrl}>Leia mais</a>
                 </div>
@@ -240,7 +214,9 @@ const PostContainer = styled.li`
     display: flex;
     gap: 20px;
     position: relative;
-    
+    img{
+     width:100%;
+    }
 
     .direita{
         display: flex;

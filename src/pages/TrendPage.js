@@ -3,9 +3,11 @@ import NavBar from "../components/NavBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import PostComponent from "../components/PostComponent";
 
 export default function TimelinePage({click, setClick}) {
     const data = JSON.parse(localStorage.getItem("userData"));
+    const [refresh, setRefresh] = useState();
     const [trends, setTrends] = useState([]);
     const [posts, setPosts] = useState([]);
     const navigate = useNavigate();
@@ -44,7 +46,7 @@ export default function TimelinePage({click, setClick}) {
                 <TrendStyled>
                     <h1>trending</h1>
                     <div>
-                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend.slice(1)}`, {state: {id: trend.id}})}>{trend.trend}</p>)}
+                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend}`, {state: {id: trend.id}})}>{trend.trend}</p>)}
                     </div>
                 </TrendStyled>
             )
@@ -58,21 +60,12 @@ export default function TimelinePage({click, setClick}) {
                 <Timeline>
                     <h1># {hashtag}</h1>
                     <Posts>
-                        {posts.map(post => 
-                            <PostContainer>
-                                    <div className="direita">
-                                        <img src={post.picture} alt=""/>
-                                        <div>
-                                            <ion-icon name="heart-outline"></ion-icon>
-                                            <span>{post.num_likes} likes</span>
-                                        </div>
-                                    </div>
-                                    <div className="esquerda">
-                                        <h2>{post.username}</h2>
-                                        <h3>{post.post} {post.trends_array.trends.map(trend => <span>{trend} </span>)}</h3>
-                                    </div>
-                            </PostContainer>
-                        )}
+                        {posts.length > 0 ? posts.map(post => {
+                                return (
+                                    <PostComponent setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
+                                )
+                            })
+                            : <>There are no posts yet</>}
                     </Posts>
 
                 </Timeline>

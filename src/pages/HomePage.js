@@ -9,27 +9,26 @@ export default function TimelinePage({ click, setClick }) {
     const data = JSON.parse(localStorage.getItem("userData"));
     const [url, setUrl] = useState();
     const [text, setText] = useState();
+    const [refresh, setRefresh] = useState();
     const [clicked, setClicked] = useState(false);
     const [trends, setTrends] = useState([]);
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const token = localStorage.getItem('token')
-
+    
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
             .then(res => setTrends(res.data))
             .catch(err => alert(err.response.data))
-    }, []);
-
-    useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/timeline`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setPosts(res.data)
+                setRefresh(false)
             })
             .catch((err) => {
                 alert("An error occured while trying to fetch the posts, please refresh the page")
             })
-    }, [token]);
+    }, [refresh, token]);
 
     function publish(e) {
         e.preventDefault();
@@ -43,6 +42,7 @@ export default function TimelinePage({ click, setClick }) {
                 setClicked(false);
                 setUrl('')
                 setText('')
+                setRefresh(true)
             })
             .catch((err) => {
                 setClicked(false);
@@ -93,7 +93,7 @@ export default function TimelinePage({ click, setClick }) {
                         {posts.length > 0 ?
                             posts.map(post => {
                                 return (
-                                    <PostComponent userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
+                                    <PostComponent setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
                                 )
                             })
                             : <>There are no posts yet</>}

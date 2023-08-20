@@ -4,16 +4,20 @@ import { styled } from "styled-components"
 import { load } from "cheerio"
 import urlMetadata from "url-metadata"
 import { useNavigate } from "react-router-dom"
+import Modal from 'react-modal';
+import { RotatingLines } from "react-loader-spinner"
 
 export default function PostComponent(props) {
     const [editor, setEditor] = useState(false)
     const [newPost, setNewPost] = useState(props.post)
     const [meta, setMeta] = useState({})
+    const [loading, setLoading] = useState(false)
     const [disabled, setDisabled] = useState(false)
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
     const {id} = JSON.parse(localStorage.getItem('userData'))
     const reference = useRef()
+    const [isOpen, setIsOpen] = useState(false)
     const parseHTML = (html) => {
 
         const $ = load(html);
@@ -79,9 +83,43 @@ export default function PostComponent(props) {
         setEditor(true); 
     }
 
+    function deletePost(){
+        setLoading(true)
+        axios.delete(`${process.env.REACT_APP_API_URL}/post/${props.id}`, {headers: {Authorization: `Bearer ${token}`}})
+        .then(() => {
+            props.setRefresh(true)
+            setIsOpen(false)
+        })
+        .catch(() => {
+            alert('Ops! Houve algum erro!')
+            setIsOpen(false)
+        })
+        .finally(() => setLoading(false))
+    }
     return (
         <PostContainer>
-
+            <Modal className='Modal' isOpen={isOpen} >
+                {loading ? 
+                <>
+                <RotatingLines
+                strokeColor="white"
+                strokeWidth="5"
+                animationDuration="1"
+                width="96"
+                visible={true}
+                />
+                </>
+                :
+                <>
+                Are you sure you want to delete this post?
+                <div>
+                    <button onClick={() => setIsOpen(false)}>No, go back</button>
+                    <button onClick={deletePost}> 
+                        Yes, delete it
+                    </button>
+                </div>
+                </>}
+            </Modal>
             <div className="direita">
                 <Imagem>
                 <img onClick={() => navigate(`/user/${props.userId}`)} src={props.picture} alt="" />
@@ -109,7 +147,7 @@ export default function PostComponent(props) {
                     <IconEdit form={`edit${props.id}`} type={editor ? 'reset' : ''} onClick={() => editor ? setEditor(false) : openEditor() } editor={editor}>
                         <i className="dashicons dashicons-edit"></i>
                     </IconEdit>
-                    <IconDelete>
+                    <IconDelete onClick={() => setIsOpen(true)}>
                         <i className="dashicons dashicons-trash"></i>
                     </IconDelete>
                 </OwnerOptions>)  :  ''
@@ -196,7 +234,7 @@ const Imagem = styled.div`
 const PostContainer = styled.li`
     font-family: 'Lato', sans-serif;
     background-color: #171717;
-    margin-top:43px;
+    margin-top:20px;
     width: 611px;
     height:276px;
     border-radius: 16px;
@@ -204,6 +242,8 @@ const PostContainer = styled.li`
     display: flex;
     gap: 20px;
     position: relative;
+    
+
     .direita{
         display: flex;
         flex-direction: column;

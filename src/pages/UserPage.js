@@ -55,10 +55,12 @@ export default function UserPage() {
                 <Timeline>
                     <h1>{username}'s posts</h1>
                     <Posts>
-                        {posts.map(x => {
-                            return(
-                                <PostComponent setRefresh={setRefresh} userId={x.userId} username={x.username} picture={x.picture} articleUrl={x.articleUrl} trends={x.trends_array} likes={x.num_likes} post={x.post} id={x.id}/>
-                        )})}
+                        {posts.length > 0 ? posts.map(post => {
+                                return (
+                                    <PostComponent setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
+                                )
+                            })
+                            : <>There are no posts yet</>}
                     </Posts>
 
                 </Timeline>

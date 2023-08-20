@@ -6,17 +6,15 @@ import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from 'react-tooltip'
 
 export default function LikeButton({ props }) {
-  const [isLiked, setIsLiked] = useState(false)
   const [countLike, setCountLike] = useState()
   const [likedNames, setLikedNames] = useState()
   const token = localStorage.getItem('token')
   const [data, setData] = useState()
+  const [isLiked, setIsLiked] = useState(true)
 
   const postId = props.id
   const username = props.username
   console.log('props', props)
-
-  // const listaDeNomesFake = 'mario, caio, joão, rafael'
 
   console.log('dados que estao vindo da requisicao', data)
 
@@ -78,16 +76,23 @@ export default function LikeButton({ props }) {
         setIsLiked(prevIsLiked => !prevIsLiked)
         handleCountLike(!isLiked)
         console.log('reposta da handleLiked', response.data)
+
         localStorage.setItem(`isLiked_${postId}`, String(!isLiked))
 
-        //inicio teste
         if (!likedNames || likedNames.trim() === '') {
-          setLikedNames(username) // Define o nome do usuário como o único nome
+          setLikedNames(username)
         } else {
-          setLikedNames(prevLikedNames => `${username}, ${prevLikedNames}`)
+          if (!isLiked) {
+            setLikedNames(prevLikedNames => `${username}, ${prevLikedNames}`)
+          } else {
+            setLikedNames(prevLikedNames =>
+              prevLikedNames
+                .split(', ')
+                .filter(name => name !== username)
+                .join(', ')
+            )
+          }
         }
-
-        // fim teste
       })
       .catch(error => {
         console.error('Erro ao enviar o like:', error)
@@ -109,7 +114,12 @@ export default function LikeButton({ props }) {
     <div>
       <StyledHeartIcon isLiked={isLiked} onClick={handleLiked} />
       <span id="my-anchor-element">{countLike} Likes</span>
-      <Tooltip anchorSelect="#my-anchor-element" content={`${displayText} `} />
+      {countLike > 0 && (
+        <Tooltip
+          anchorSelect="#my-anchor-element"
+          content={`${displayText} `}
+        />
+      )}
     </div>
   )
 }

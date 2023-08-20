@@ -54,7 +54,9 @@ export default function NavBar({click, setClick}) {
                 <div>
                     <div className="user" onClick={clickChange}>
                         <ion-icon name="chevron-up-outline"></ion-icon>
-                        <img src={data.picture} alt="ImagemPerfil" />
+                        <Imagem>
+                            <img src={data.picture} alt="ImagemPerfil" />
+                        </Imagem>
                     </div>
                     <div className="logout">
                         <span onClick={logOut}>Logout</span>
@@ -65,7 +67,9 @@ export default function NavBar({click, setClick}) {
             return (
                 <div className="user" onClick={clickChange}>
                     <ion-icon name="chevron-down-outline"></ion-icon>
-                    <img src={data.picture} alt="ImagemPerfil"/>
+                    <Imagem>
+                            <img src={data.picture} alt="ImagemPerfil" />
+                    </Imagem>
                 </div>
             )
         }
@@ -104,8 +108,23 @@ export default function NavBar({click, setClick}) {
         </ContainerGeral>
     )
 }
-
+const Imagem = styled.div`
+    box-sizing: border-box;
+    background-color: blue;
+    height:50px;
+    width:50px;
+    min-width: 50px;
+    overflow: hidden;
+    border-radius:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img{    
+        height:100%;
+    }
+    `
 const ContainerGeral = styled.div`
+    box-sizing: border-box;
     height: 72px;
     background-color: #151515;
     display: flex;
@@ -113,7 +132,7 @@ const ContainerGeral = styled.div`
     justify-content: space-between;
     padding: 15px;
     position: relative;
-    width: 100%;
+    width: 100vw;
     z-index:9;
     h1{
         font-family: 'Passion One', cursive;
@@ -142,10 +161,22 @@ const ContainerGeral = styled.div`
             border: none;
             font-size: 15px;
             z-index:10;
-            @media(max-width:400px){
-                width: 350px;
-            }
         }
+
+        @media(max-width: 770px){
+            position: absolute;
+            top:80px;
+            left: 10px;
+            right: 10px;
+            width: calc(100vw - 20px);
+            height: 45px;
+            input{
+                width: 100%;
+                height: 100%;
+            }
+            
+        }
+
     }
     .user{
         display: flex;
@@ -156,11 +187,7 @@ const ContainerGeral = styled.div`
             color: #FFFFFF;
             font-size: 30px;
         }
-        img{
-            width: 50px;
-            height: 50px;
-            border-radius: 100%;
-        }
+        
     }
     .logout{
         font-family: 'lato';
@@ -176,10 +203,16 @@ const ContainerGeral = styled.div`
         bottom: -47px;
         background-color: #151515;
         border-bottom-left-radius: 20px;
+        z-index: 20;
         span:hover{
             text-decoration: underline;
             cursor: pointer;
         }
+    }
+    @media(max-width: 770px){
+        box-sizing: border-box;    
+        width: 100vw;
+
     }
 `
 

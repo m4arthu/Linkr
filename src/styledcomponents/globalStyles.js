@@ -3,6 +3,57 @@ import {createGlobalStyle} from  "styled-components"
 
 
 export const  Globalstyles = createGlobalStyle`
+.Modal {
+	box-sizing: border-box;
+    position: fixed;
+	width: 597px;
+	height: 262px;
+	top: 35%;
+	left: 35%;
+    background-color: #333333;
+	border-radius: 50px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-evenly;
+	font-family: 'Lato', sans-serif;
+	color: white;
+	padding-left: 110px;
+	padding-right: 110px;
+	font-size: 34px;
+	font-weight: 700;
+	line-height: 41px;
+	letter-spacing: 0em;
+	text-align: center;
+	div{
+		display: flex;
+		gap: 10px;
+		button{
+			width: 	134px;
+			height: 37px;
+			font-family: Lato;
+			font-size: 18px;
+			font-weight: 700;
+			line-height: 22px;
+			letter-spacing: 0em;
+			text-align: left;
+			border-radius: 5px;
+			display: flex;
+			align-items: center;
+			justify-content:center;
+
+		}
+		:nth-child(1){
+			color: #1877F2;
+			background-color: white;
+		}
+		:nth-child(2){
+			background-color: #1877F2;
+			color: white;
+		}
+	}
+
+    }
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,

@@ -78,6 +78,7 @@ export default function TimelinePage({click, setClick}) {
 
 const ContainerHome = styled.div`
     height:100vh;
+    width: 100vw;
     display: flex;
     justify-content:center;
     gap: 15px;
@@ -91,9 +92,13 @@ const Timeline = styled.div`
     font-weight:700;
     font-size:43px;
     color: #FFFFFF;
+    h1 {
+        margin-left: 15px;
 
-    @media(max-width: 611px){
-        width:100%
+    }
+
+    @media(max-width: 770px){
+        width:100vw;
     }
 `
 
@@ -118,6 +123,7 @@ const TrendStyled = styled.div`
         font-family: 'Passion One', cursive;
         font-size: 27px;
         margin-left: 15px;
+        
     }
     div{
         padding: 15px;
@@ -135,54 +141,7 @@ const TrendStyled = styled.div`
         text-decoration: underline;
         cursor: pointer;
     }
-`
-
-const PostContainer = styled.div`
-    font-family: 'Lato', sans-serif;
-    background-color: #171717;
-    border-radius: 16px;
-    padding: 15px;
-    display: flex;
-    gap: 20px;
-    .direita{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-        img{
-            width: 50px;
-            height: 50px;
-            border-radius: 100%;
-        }
-        div{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 10px;
-            font-weight: 400;
-            gap: 2px;
-            ion-icon{
-                font-size: 20px;
-            }
-        }
-    }
-    .esquerda{
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        :nth-child(1){
-            font-weight: 400;
-            font-size: 20px;
-        }
-        :nth-child(2){
-            font-weight: 400;
-            font-size: 15px;
-            color: #C6C6C6;
-            span{
-                color: white;
-                font-weight: 600;
-                font-size: 15px;
-            }
-        }
+    @media(max-width: 770px){
+        display:none;
     }
 `

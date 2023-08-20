@@ -63,7 +63,7 @@ export default function TimelinePage({ click, setClick }) {
                 <TrendStyled>
                     <h1>trending</h1>
                     <div>
-                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend.slice(1)}`, { state: { id: trend.id } })}>{trend.trend}</p>)}
+                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend}`, { state: { id: trend.id } })}>{trend.trend}</p>)}
                     </div>
                 </TrendStyled>
             )
@@ -109,6 +109,7 @@ export default function TimelinePage({ click, setClick }) {
 
 const ContainerHome = styled.div`
     height:100vh;
+    width: 100vw;
     display: flex;
     justify-content:center;
     gap: 15px;
@@ -122,9 +123,12 @@ const Timeline = styled.div`
     font-weight:700;
     font-size:43px;
     color: #FFFFFF;
+    h1 {
+        margin-left: 15px;
 
-    @media(max-width: 611px){
-        width:100%
+    }
+    @media(max-width: 770px){
+        width:100vw;
     }
 `
 
@@ -135,6 +139,10 @@ const ShareMe = styled.div`
     width:100%;
     height:209px;
     background-color: #FFFFFF;
+    @media(max-width: 770px){
+        border-radius: 0;
+        height: 164px;
+    }
 `
 
 const Imagem = styled.div`
@@ -142,7 +150,6 @@ const Imagem = styled.div`
     height:50px;
     width:50px;
     min-width: 50px;
-    background-color: blue;
     overflow: hidden;
     border-radius:100%;
     margin-top:16px;
@@ -152,6 +159,9 @@ const Imagem = styled.div`
     justify-content: center;
     img{    
         height:100%;
+    }
+    @media(max-width: 770px){
+        display: none;
     }
 `
 
@@ -166,6 +176,7 @@ const FormShare = styled.form`
         color: #707070;
         font-size:20px;
         font-weight:300;
+        
     }
     input{
         background-color: #EFEFEF;
@@ -190,7 +201,20 @@ const FormShare = styled.form`
         height:66px;
         padding:8px 0px 40px 13px;
     }
-
+    @media(max-width: 770px){
+        box-sizing: border-box;
+        width:100vw;
+        padding-left: 5px;
+        padding-right: 5px;
+        align-items: center;
+        label{
+            padding-top: 5px;
+        }
+        input{
+            max-width: calc(100% - 10px);
+        }
+        
+    }
 `
 
 const Button = styled.button`
@@ -199,7 +223,7 @@ const Button = styled.button`
     justify-content:center;
     align-items:center;
     height:31px;
-    max-width:112px;
+    width:112px;
     border-radius:5px;
     margin: 5px 0px 0px 395px;
     border:none;
@@ -208,6 +232,13 @@ const Button = styled.button`
     text-align:center;
     font-family: 'Lato', sans-serif;
     font-weight:700;
+    @media(max-width: 770px){
+        height: 22px;
+        margin-top: 5px;
+        margin-left: calc(100% - 112px);
+
+    }
+
     `
 
 const Posts = styled.ul`
@@ -246,6 +277,9 @@ const TrendStyled = styled.div`
     p:hover{
         text-decoration: underline;
         cursor: pointer;
+    }
+    @media(max-width: 770px){
+        display:none;
     }
 `
 

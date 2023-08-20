@@ -283,4 +283,9 @@ const PostContainer = styled.li`
             }
         }
     }
+
+    @media(max-width: 770px){
+        width: 100%;
+        border-radius: 0;
+    }
 `

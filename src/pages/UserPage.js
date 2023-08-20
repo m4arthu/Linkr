@@ -86,9 +86,12 @@ const Timeline = styled.div`
     font-weight:700;
     font-size:43px;
     color: #FFFFFF;
+    h1 {
+        margin-left: 15px;
 
-    @media(max-width: 611px){
-        width:100%
+    }
+    @media(max-width: 770px){
+        width:100vw;
     }
 `
 
@@ -127,5 +130,8 @@ const TrendStyled = styled.div`
     p:hover{
         text-decoration: underline;
         cursor: pointer;
+    }
+    @media(max-width: 770px){
+        display:none;
     }
 `

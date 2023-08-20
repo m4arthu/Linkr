@@ -6,6 +6,7 @@ import urlMetadata from "url-metadata"
 import { useNavigate } from "react-router-dom"
 import Modal from 'react-modal';
 import { RotatingLines } from "react-loader-spinner"
+import LikeButton from "./LikeButton"
 
 export default function PostComponent(props) {
     const [editor, setEditor] = useState(false)
@@ -124,10 +125,7 @@ export default function PostComponent(props) {
                 <Imagem>
                 <img onClick={() => navigate(`/user/${props.userId}`)} src={props.picture} alt="" />
                 </Imagem>
-                <div>
-                    <ion-icon name="heart-outline"></ion-icon>
-                    <span>{props.num_likes} likes</span>
-                </div>
+                <LikeButton props={props}/>
             </div>
             <div className="esquerda">
                 <h2 onClick={() => navigate(`/user/${props.userId}`)}>{props.username}</h2>

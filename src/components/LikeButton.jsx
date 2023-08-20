@@ -7,61 +7,34 @@ import { Tooltip } from 'react-tooltip'
 
 export default function LikeButton({ props }) {
   const [countLike, setCountLike] = useState()
-  const [likedNames, setLikedNames] = useState()
   const token = localStorage.getItem('token')
   const [data, setData] = useState()
-  const [isLiked, setIsLiked] = useState(true)
+  const [isLiked, setIsLiked] = useState(false)
 
   const postId = props.id
   const username = props.username
-  console.log('props', props)
 
-  console.log('dados que estao vindo da requisicao', data)
-
-  let displayText = ''
-
-  if (likedNames && likedNames.trim() !== '') {
-    const namesArray = likedNames.split(',')
-    const isUserLiked = namesArray.includes(username)
-
-    const processedNames = namesArray.filter(name => name !== username)
-
-    if (isUserLiked) {
-      processedNames.unshift('você')
-    }
-
-    if (processedNames.length === 1) {
-      displayText = processedNames[0]
-    } else if (processedNames.length === 2) {
-      displayText = `${processedNames.join(', ')}`
-    } else if (processedNames.length > 2) {
-      const firstTwoNames = processedNames.slice(0, 2).join(', ')
-      displayText = `${firstTwoNames}, and other ${
-        processedNames.length - 2
-      } people`
-    }
-  } else {
-    displayText = likedNames
-  }
+  const [likedNamesMap, setLikedNamesMap] = useState({})
 
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/like/${postId}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
-
       .then(response => {
         setData(response.data)
         setCountLike(response.data.likes)
-        setLikedNames(response.data.likedByNames)
-        // setLikedNames(listaDeNomesFake)
+        console.log('oque esta vindo do banco', response.data)
 
-        console.log('reposta da useEffect', response)
+        setLikedNamesMap(prevMap => ({
+          ...prevMap,
+          [postId]: response.data.likedByNames.split(', ')
+        }))
       })
       .catch(error => {
         console.error('Erro ao obter a contagem de likes:', error)
       })
-  }, [])
+  }, [postId])
 
   function handleLiked() {
     axios
@@ -79,20 +52,13 @@ export default function LikeButton({ props }) {
 
         localStorage.setItem(`isLiked_${postId}`, String(!isLiked))
 
-        if (!likedNames || likedNames.trim() === '') {
-          setLikedNames(username)
-        } else {
-          if (!isLiked) {
-            setLikedNames(prevLikedNames => `${username}, ${prevLikedNames}`)
-          } else {
-            setLikedNames(prevLikedNames =>
-              prevLikedNames
-                .split(', ')
-                .filter(name => name !== username)
-                .join(', ')
-            )
-          }
-        }
+        // Atualiza o mapa de nomes de acordo com a ação de curtir/descurtir
+        setLikedNamesMap(prevMap => ({
+          ...prevMap,
+          [postId]: !isLiked
+            ? [...prevMap[postId], username]
+            : prevMap[postId].filter(name => name !== username)
+        }))
       })
       .catch(error => {
         console.error('Erro ao enviar o like:', error)
@@ -104,20 +70,46 @@ export default function LikeButton({ props }) {
     if (storedIsLiked !== null) {
       setIsLiked(storedIsLiked === 'true')
     }
-  }, [])
+  }, [postId])
 
   function handleCountLike(updatedIsLiked) {
     setCountLike(updatedIsLiked ? countLike + 1 : countLike - 1)
   }
 
+  const namesArray = likedNamesMap[postId] || []
+
+  let displayText = ''
+
+  if (namesArray.length > 0) {
+    const isUserLiked = namesArray.includes(username)
+
+    let processedNames = [...namesArray]
+
+    if (isUserLiked) {
+      processedNames = processedNames.filter(name => name !== username)
+      processedNames.unshift('você')
+    }
+
+    if (processedNames.length === 1) {
+      displayText = processedNames[0]
+    } else if (processedNames.length === 2) {
+      displayText = `${processedNames.join(', ')}`
+    } else if (processedNames.length > 2) {
+      const firstTwoNames = processedNames.slice(0, 2).join(', ')
+      displayText = `${firstTwoNames}, and other ${
+        processedNames.length - 2
+      } people`
+    }
+  }
+
   return (
     <div>
       <StyledHeartIcon isLiked={isLiked} onClick={handleLiked} />
-      <span id="my-anchor-element">{countLike} Likes</span>
+      <span id={`my-anchor-element-${postId}`}>{countLike} Likes</span>
       {countLike > 0 && (
         <Tooltip
-          anchorSelect="#my-anchor-element"
-          content={`${displayText} `}
+          anchorSelect={`#my-anchor-element-${postId}`}
+          content={displayText}
         />
       )}
     </div>

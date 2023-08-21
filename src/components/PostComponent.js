@@ -4,6 +4,7 @@ import { styled } from "styled-components"
 import { useNavigate } from "react-router-dom"
 import Modal from 'react-modal';
 import { RotatingLines } from "react-loader-spinner"
+import LikeButton from "./LikeButton";
 
 export default function PostComponent(props) {
     const [editor, setEditor] = useState(false)
@@ -17,6 +18,10 @@ export default function PostComponent(props) {
     const reference = useRef()
     const [isOpen, setIsOpen] = useState(false)
 
+    useEffect(() => {
+        reference.current?.focus()
+        reference.current?.select()
+    }, [editor])
 
     useEffect(() => {
         axios.get(`https://jsonlink.io/api/extract?url=${(props.articleUrl)}`)
@@ -27,9 +32,8 @@ export default function PostComponent(props) {
             .catch((e) => {
                 console.log(e)
             })
-        reference.current?.focus()
-        reference.current?.select()
-    }, [editor])
+    }, [])
+
 
     function resetFunction() {
         document.getElementById(`edit${props.id}`).reset()
@@ -54,8 +58,8 @@ export default function PostComponent(props) {
             .finally(() => {
             })
     }
-    function openEditor() {
-        setEditor(true);
+    function openEditor(){
+        setEditor(true); 
     }
 
     function deletePost() {
@@ -71,6 +75,7 @@ export default function PostComponent(props) {
             })
             .finally(() => setLoading(false))
     }
+
     return (
         <PostContainer>
             <Modal className='Modal' isOpen={isOpen} >
@@ -99,10 +104,7 @@ export default function PostComponent(props) {
                 <Imagem>
                     <img onClick={() => navigate(`/user/${props.userId}`)} src={props.picture} alt="" />
                 </Imagem>
-                <div>
-                    <ion-icon name="heart-outline"></ion-icon>
-                    <span>{props.num_likes} likes</span>
-                </div>
+                <LikeButton post = {props} idLog={id}/>
             </div>
             <div className="esquerda">
                 <h2 onClick={() => navigate(`/user/${props.userId}`)}>{props.username}</h2>

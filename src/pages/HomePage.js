@@ -124,7 +124,7 @@ export default function TimelinePage({ click, setClick }) {
                         <FormShare onSubmit={(e) => { publish(e) }}>
                             <label htmlFor="url">What are you going to share today?</label>
                             <input disabled={clicked} data-test="link" type="url" id="url" placeholder='http://...' value={url} onChange={(e) => { setUrl(e.target.value) }} required />
-                            <input disabled={clicked} data-test="description" type="text" placeholder='Awesome article about #javascript' value={text} onChange={(e) => { handleText(e.target.value) }} required />
+                            <input disabled={clicked} data-test="description" type="text" placeholder='Awesome article about #javascript' value={text} onChange={(e) => { handleText(e.target.value) }} />
                             <Button data-test="publish-btn" disabled={clicked} type='submit'>{clicked ? 'Publishing...' : 'Publish'}</Button>
                         </FormShare>
                     </ShareMe>

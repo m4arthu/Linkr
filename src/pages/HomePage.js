@@ -86,7 +86,7 @@ export default function TimelinePage({ click, setClick }) {
             .catch((err) => {
                 setClicked(false);
                 console.log(err)
-                alert('Houve um erro ao publicar seu link')
+                alert("There was an error publishing your link")
 
             })
     }
@@ -136,7 +136,7 @@ export default function TimelinePage({ click, setClick }) {
                                         <PostComponent key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
                                     )
                                 })
-                                : <>There are no posts yet</>}
+                                : <h1 data-test="message" >There are no posts yet</h1>}
                     </Posts>
 
                 </Timeline>

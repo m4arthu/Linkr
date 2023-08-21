@@ -20,7 +20,7 @@ export  const  LoginPage = () => {
             <input data-test="email" type="text" ref={email} placeholder="e-mail" required/>
                 <input data-test="password" type="password" ref={password} placeholder="Password" required/>
                 <button data-test="login-btn" disabled={buttonState}>Log In</button>
-                <Link data-test="sign-up-link" to={"/register"}>First time? Create an account!</Link>
+                <Link data-test="sign-up-link" to={"/sign-up"}>First time? Create an account!</Link>
             </LoginFormContainer>
         </Container>
     )

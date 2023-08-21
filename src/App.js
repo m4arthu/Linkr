@@ -25,8 +25,8 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route exact path="/" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/home" element={ isLoged() ? <HomePage click={click} setClick={setClick}/> : <Navigate to={"/"}/>} />
+          <Route path="/sign-up" element={<RegisterPage />} />
+          <Route path="/timeline" element={ isLoged() ? <HomePage click={click} setClick={setClick}/> : <Navigate to={"/"}/>} />
           <Route path="/hashtag/:hashtag" element={ isLoged() ? <TrendPage click={click} setClick={setClick}/>: <Navigate to={"/"}/>} />
           <Route path="/user/:id" element={ isLoged()? <UserPage />: <Navigate to={"/"}/>} />
         </Routes>

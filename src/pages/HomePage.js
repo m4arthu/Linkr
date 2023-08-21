@@ -102,7 +102,7 @@ export default function TimelinePage({ click, setClick }) {
                 <TrendStyled data-test="trending">
                     <h1>trending</h1>
                     <div>
-                        {trends.map(trend => <p key={trend.id} onClick={() => navigate(`/hashtag/${trend.trend.slice(1)}`, { state: { id: trend.id } })} data-test="hashtag"># {trend.trend.slice(1)}</p>)}
+                        {trends.map(trend => <p key={trend.id} onClick={() => navigate(`/hashtag/${trend.trend.slice(1)}`, { state: { id: trend.id } })} data-test="hashtag">#{trend.trend.slice(1)}</p>)}
                     </div>
                 </TrendStyled>
             )

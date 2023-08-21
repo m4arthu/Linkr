@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import { RotatingLines } from "react-loader-spinner"
 
 export default function PostComponent(props) {
+    console.log(props);
     const [editor, setEditor] = useState(false)
     const [newPost, setNewPost] = useState(props.post)
     const [meta, setMeta] = useState({})
@@ -71,6 +72,12 @@ export default function PostComponent(props) {
             })
             .finally(() => setLoading(false))
     }
+
+    function likePost(id) {
+        console.log(id);
+        console.log(token);
+    }
+
     return (
         <PostContainer>
             <Modal className='Modal' isOpen={isOpen} >
@@ -99,7 +106,7 @@ export default function PostComponent(props) {
                 <Imagem>
                     <img onClick={() => navigate(`/user/${props.userId}`)} src={props.picture} alt="" />
                 </Imagem>
-                <div>
+                <div onClick={() => likePost(props.id)}>
                     <ion-icon name="heart-outline"></ion-icon>
                     <span>{props.num_likes} likes</span>
                 </div>

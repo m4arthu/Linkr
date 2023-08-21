@@ -9,16 +9,16 @@ export default function TimelinePage({ click, setClick }) {
     const data = JSON.parse(localStorage.getItem("userData"));
     const picture = data ? data.picture : ''
     const [url, setUrl] = useState();
-    const [text, setText] = useState();
+    const [text, setText] = useState('');
     const [refresh, setRefresh] = useState();
     const [clicked, setClicked] = useState(false);
     const [trends, setTrends] = useState([]);
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
+    const [hashArrayPub, setHashArrayPub] = useState([])
     const token = localStorage.getItem('token')
     
     useEffect(() => {
-    if (!token) return navigate('/')
 
         axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
             .then(res => setTrends(res.data))
@@ -33,12 +33,46 @@ export default function TimelinePage({ click, setClick }) {
             })
     }, [refresh, token]);
 
+    function handleText(x){
+        setText(x)
+        const hashArray =[]
+        const str = x
+        let rolling = false;
+        let iSubstr;
+        let fSubstr;
+        const regex = /[^\w\s]/g
+        for(let i=0; i<str.length; i++){
+            if (rolling) {
+                if ( str[i] === ' ' || str[i] === '.' ||str[i] === ',' ||str[i] === ';' ||str[i] === '!' ||str[i] === '?' ||str[i] === '@' || str[i] === '#'){
+                    fSubstr = i
+                    rolling = false;
+                    hashArray.push (str.substring(iSubstr, fSubstr))
+                } else if ( i === str.length - 1){
+                    rolling = false;
+                    hashArray.push (str.substring(iSubstr))
+
+                }
+            }
+            if (str[i] === '#'){
+                iSubstr = i
+                rolling = true;
+            }
+           
+        }
+        const arraySemDuplicados = hashArray.filter((valor, indice, self) => {
+            return self.indexOf(valor) === indice;
+          });
+
+        setHashArrayPub(arraySemDuplicados)
+    }
+
     function publish(e) {
         e.preventDefault();
-
+              
         setClicked(true);
 
-        const body = { url, text }
+        const body = { url, text, trends: hashArrayPub }
+        console.log(body)
 
         axios.post(`${process.env.REACT_APP_API_URL}/timeline`, body, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
@@ -49,6 +83,7 @@ export default function TimelinePage({ click, setClick }) {
             })
             .catch((err) => {
                 setClicked(false);
+                console.log(err)
                 alert('Houve um erro ao publicar seu link')
 
             })
@@ -57,16 +92,16 @@ export default function TimelinePage({ click, setClick }) {
     function TrendsContainer() {
         if (trends.length === 0) {
             return (
-                <TrendStyled>
+                <TrendStyled data-test="trending">
                     <h1>trending</h1>
                 </TrendStyled>
             )
         } else {
             return (
-                <TrendStyled>
+                <TrendStyled data-test="trending">
                     <h1>trending</h1>
                     <div>
-                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend}`, { state: { id: trend.id } })}>{trend.trend}</p>)}
+                        {trends.map(trend => <p key={trend.id} onClick={() => navigate(`/hashtag/${trend.trend.slice(1)}`, { state: { id: trend.id } })} data-test="hashtag"># {trend.trend.slice(1)}</p>)}
                     </div>
                 </TrendStyled>
             )
@@ -87,7 +122,7 @@ export default function TimelinePage({ click, setClick }) {
                         <FormShare onSubmit={(e) => { publish(e) }}>
                             <label htmlFor="url">What are you going to share today?</label>
                             <input disabled={clicked} type="url" id="url" placeholder='http://...' value={url} onChange={(e) => { setUrl(e.target.value) }} required />
-                            <input disabled={clicked} type="text" placeholder='Awesome article about #javascript' value={text} onChange={(e) => { setText(e.target.value) }} required />
+                            <input disabled={clicked} type="text" placeholder='Awesome article about #javascript' value={text} onChange={(e) => { handleText(e.target.value) }} required />
                             <Button disabled={clicked} type='submit'>{clicked ? 'Publishing...' : 'Publish'}</Button>
                         </FormShare>
                     </ShareMe>
@@ -95,7 +130,7 @@ export default function TimelinePage({ click, setClick }) {
                         {posts.length > 0 ?
                             posts.map(post => {
                                 return (
-                                    <PostComponent setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
+                                    <PostComponent key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
                                 )
                             })
                             : <>There are no posts yet</>}
@@ -110,6 +145,7 @@ export default function TimelinePage({ click, setClick }) {
 }
 
 const ContainerHome = styled.div`
+    box-sizing: border-box;
     height:100vh;
     width: 100vw;
     display: flex;
@@ -118,6 +154,7 @@ const ContainerHome = styled.div`
 `
 
 const Timeline = styled.div`
+    box-sizing: border-box;
     padding-top: 78px;
     width:611px;
     height:100%;
@@ -168,6 +205,7 @@ const Imagem = styled.div`
 `
 
 const FormShare = styled.form`
+    box-sizing: border-box;
     display: flex;
     width:100%;
     flex-direction: column;
@@ -237,7 +275,7 @@ const Button = styled.button`
     @media(max-width: 770px){
         height: 22px;
         margin-top: 5px;
-        margin-left: calc(100% - 112px);
+        margin-left: calc(100% - 120px);
 
     }
 

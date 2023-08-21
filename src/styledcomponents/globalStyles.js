@@ -52,6 +52,16 @@ export const  Globalstyles = createGlobalStyle`
 			color: white;
 		}
 	}
+	@media (max-width: 1000px) {
+		width: 100%;
+		left: 0;
+		border-radius: 0;
+	}
+
+	@media (max-width: 430px){
+		padding-left: 0;
+		padding-right: 0;
+	}
 
     }
 html, body, div, span, applet, object, iframe,

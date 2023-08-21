@@ -10,7 +10,6 @@ import { Navigate } from "react-router-dom";
 import { useState } from "react";
 function App() {
    const  isLoged = () => {
-    console.log(true)
     let token = localStorage.getItem("token")
     if(token){
       axios.defaults.headers.common["Authorization"] = token
@@ -28,7 +27,7 @@ function App() {
           <Route exact path="/" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/home" element={ isLoged() ? <HomePage click={click} setClick={setClick}/> : <Navigate to={"/"}/>} />
-          <Route path="/hashtag/:hashtag" element={ isLoged ()? <TrendPage click={click} setClick={setClick}/>: <Navigate to={"/"}/>} />
+          <Route path="/hashtag/:hashtag" element={ isLoged() ? <TrendPage click={click} setClick={setClick}/>: <Navigate to={"/"}/>} />
           <Route path="/user/:id" element={ isLoged()? <UserPage />: <Navigate to={"/"}/>} />
         </Routes>
       </AuthProvider>

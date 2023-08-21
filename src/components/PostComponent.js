@@ -79,7 +79,7 @@ export default function PostComponent(props) {
     }
 
     return (
-        <PostContainer>
+        <PostContainer data-test="post">
             <Modal className='Modal' isOpen={isOpen} >
                 {loading ?
                     <>
@@ -110,14 +110,14 @@ export default function PostComponent(props) {
                 <LikeButton post={props} idLog={id} />
             </div>
             <div className="esquerda">
-                <h2 onClick={() => navigate(`/user/${props.userId}`)}>{props.username}</h2>
+                <h2 data-test="username" onClick={() => navigate(`/user/${props.userId}`)}>{props.username}</h2>
                 {editor ?
                     (<SCform id={`edit${props.id}`}>
                         <SCinput ref={reference} disabled={disabled} defaultValue={props.post} onKeyDown={e => (e.keyCode === 13 && !e.shiftKey ? handleEnter(e) : (e.keyCode === 27 ? resetFunction() : ''))} onChange={e => setNewPost(e.target.value)} />
-                    </SCform>) : (<h3>{props.post}</h3>)}
+                    </SCform>) : (<h3 data-test="description" >{props.post}</h3>)}
 
 
-                <A href={props.articleUrl} target={'blank'}>
+                <A data-test="link" href={props.articleUrl} target={'blank'}>
                     <div className="card">
                         <div className="card-details">
                             <div className="primeiro">

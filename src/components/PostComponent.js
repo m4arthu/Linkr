@@ -120,14 +120,14 @@ export default function PostComponent(props) {
 
                 </div>
                 {id === props.userId ?
-                    (<OwnerOptions>
+                    <OwnerOptions>
                         <IconEdit form={`edit${props.id}`} type={editor ? 'reset' : ''} onClick={() => editor ? setEditor(false) : openEditor()} editor={editor}>
                             <i className="dashicons dashicons-edit"></i>
                         </IconEdit>
                         <IconDelete onClick={() => setIsOpen(true)}>
                             <i className="dashicons dashicons-trash"></i>
                         </IconDelete>
-                    </OwnerOptions>) : ''
+                    </OwnerOptions> : ''
                 }
             </div>
 
@@ -217,6 +217,7 @@ const PostContainer = styled.li`
     padding: 15px;
     display: flex;
     gap: 20px;
+    position:relative;
     img{
          max-width:153px;
          border-radius: 0 12px 12px 0;

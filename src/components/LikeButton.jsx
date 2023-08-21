@@ -11,7 +11,7 @@ export default function LikeButton({ post, idLog }) {
   let [text, setText] = useState('');
   let [usersLiked, setUsersLiked] = useState([]);
   const token = localStorage.getItem('token')
-
+  const [liked,setLiked] = useState(false)
   const postId = post.id;
 
   // console.log(`postID`, postId)
@@ -31,12 +31,11 @@ export default function LikeButton({ post, idLog }) {
       })
       axios.get(`${process.env.REACT_APP_API_URL}/usersliked/${postId}`)
            .then(res => {
-              let liked = false;
               setUsersLiked(res.data)
               res.data.forEach(user => {
                   if (user.userId == idLog){
                     setIsLiked(true);
-                    liked = true;
+                    setLiked(true)
                   }
               })
               if (liked) {
@@ -68,6 +67,11 @@ export default function LikeButton({ post, idLog }) {
   // console.log(usersLiked);
 
   function handleLiked() {
+    if(!liked){
+      setLiked(true)
+    } else{
+      setLiked(false)
+    }
     axios
       .post(
         `${process.env.REACT_APP_API_URL}/post/${postId}`,

@@ -101,7 +101,7 @@ export default function PostComponent(props) {
                 <Imagem>
                     <img onClick={() => navigate(`/user/${props.userId}`)} src={props.picture} alt="" />
                 </Imagem>
-                <LikeButton post = {props}/>
+                <LikeButton post = {props} idLog={id}/>
             </div>
             <div className="esquerda">
                 <h2 onClick={() => navigate(`/user/${props.userId}`)}>{props.username}</h2>

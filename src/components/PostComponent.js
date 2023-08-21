@@ -16,6 +16,7 @@ export default function PostComponent(props) {
     const token = localStorage.getItem('token')
     const { id } = JSON.parse(localStorage.getItem('userData'))
     const reference = useRef()
+    const [load, setLoad] = useState(true)
     const [isOpen, setIsOpen] = useState(false)
 
     useEffect(() => {
@@ -26,6 +27,7 @@ export default function PostComponent(props) {
     useEffect(() => {
         axios.get(`https://jsonlink.io/api/extract?url=${(props.articleUrl)}`)
             .then(res => {
+                setLoad(false)
                 setMeta(res.data)
                 console.log(res.data)
             })
@@ -58,8 +60,8 @@ export default function PostComponent(props) {
             .finally(() => {
             })
     }
-    function openEditor(){
-        setEditor(true); 
+    function openEditor() {
+        setEditor(true);
     }
 
     function deletePost() {
@@ -100,11 +102,12 @@ export default function PostComponent(props) {
                         </div>
                     </>}
             </Modal>
+
             <div className="direita">
                 <Imagem>
                     <img onClick={() => navigate(`/user/${props.userId}`)} src={props.picture} alt="" />
                 </Imagem>
-                <LikeButton post = {props} idLog={id}/>
+                <LikeButton post={props} idLog={id} />
             </div>
             <div className="esquerda">
                 <h2 onClick={() => navigate(`/user/${props.userId}`)}>{props.username}</h2>
@@ -112,15 +115,20 @@ export default function PostComponent(props) {
                     (<SCform id={`edit${props.id}`}>
                         <SCinput ref={reference} disabled={disabled} defaultValue={props.post} onKeyDown={e => (e.keyCode === 13 && !e.shiftKey ? handleEnter(e) : (e.keyCode === 27 ? resetFunction() : ''))} onChange={e => setNewPost(e.target.value)} />
                     </SCform>) : (<h3>{props.post}</h3>)}
-                <div className="card">
-                    <div className="card-details">
-                        <h2>{meta.title}</h2>
-                        <p>{meta.description}</p>
-                        <a href={props.articleUrl}>{props.articleUrl}</a>
-                    </div>
-                    {<img src={meta.images ? meta.images[0] : ""} alt="Imagem da Matéria" />}
 
-                </div>
+
+                <A href={props.articleUrl} target={'blank'}>
+                    <div className="card">
+                        <div className="card-details">
+                            <div className="primeiro">
+                                <h2>{meta.title}</h2>
+                                <p>{meta.description}</p>
+                                <a href={props.articleUrl}>{props.articleUrl}</a>
+                            </div>
+                        </div>
+                        {<img src={meta.images ? meta.images[0] : ""} alt="Imagem da Matéria" />}
+
+                    </div></A>
                 {id === props.userId ?
                     <OwnerOptions>
                         <IconEdit form={`edit${props.id}`} type={editor ? 'reset' : ''} onClick={() => editor ? setEditor(false) : openEditor()} editor={editor}>
@@ -265,22 +273,41 @@ const PostContainer = styled.li`
         }
         .card{
             display:flex;
-            h2{
-                margin-bottom: 10px;
-            }
-            p{
-                font-size: 14px;        
-            }
+            height:155px;
+            width:503px;
+            margin-top:15px;
+
             .card-details{
                 border-radius:12px 0px 0px 12px;
-                border:1px solid gray;
+                border:1px solid #4D4D4D;
                 border-right:inherit;
-                padding: 10px 0 10px 10px;
+                padding: 24px 0px 0px 20px;
+                width:350px;
 
-                a{
-                    text-decoration: none;
-                     font-size:14px;
-                     color:inherit;
+                .primeiro{
+                    width:305px;
+
+                    h2{
+                        color: #CECECE;
+                        font-weight:400;
+                        font-family: Lato;
+                        font-size:16px;
+                    }
+                    p{
+                        margin-top:6px;
+                        font-size: 11px;
+                        color:#9B9595;
+                        margin-bottom:13px;
+                        font-family: Lato;
+                        font-weight:400;
+                    }
+                    a{
+                        color: #CECECE;
+                        font-family: Lato;
+                        text-decoration: none;
+                        font-size:11px;
+                        font-weight:400;
+                    }
                 }
             }
 
@@ -291,4 +318,10 @@ const PostContainer = styled.li`
         width: 100%;
         border-radius: 0;
     }
+`
+
+const A = styled.a`
+    text-decoration: none;
+    color:inherit;
+
 `

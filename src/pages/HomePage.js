@@ -115,7 +115,7 @@ export default function TimelinePage({ click, setClick }) {
             <ContainerHome onClick={() => setClick(false)}>
                 <Timeline>
                     <h1>timeline</h1>
-                    <ShareMe>
+                    <ShareMe data-test="publish-box">
                         <Imagem>
                             <img src={picture} alt="Imagem de perfil"></img>
 
@@ -123,9 +123,9 @@ export default function TimelinePage({ click, setClick }) {
 
                         <FormShare onSubmit={(e) => { publish(e) }}>
                             <label htmlFor="url">What are you going to share today?</label>
-                            <input disabled={clicked} type="url" id="url" placeholder='http://...' value={url} onChange={(e) => { setUrl(e.target.value) }} required />
-                            <input disabled={clicked} type="text" placeholder='Awesome article about #javascript' value={text} onChange={(e) => { handleText(e.target.value) }} required />
-                            <Button disabled={clicked} type='submit'>{clicked ? 'Publishing...' : 'Publish'}</Button>
+                            <input disabled={clicked} data-test="link" type="url" id="url" placeholder='http://...' value={url} onChange={(e) => { setUrl(e.target.value) }} required />
+                            <input disabled={clicked} data-test="description" type="text" placeholder='Awesome article about #javascript' value={text} onChange={(e) => { handleText(e.target.value) }} required />
+                            <Button data-test="publish-btn" disabled={clicked} type='submit'>{clicked ? 'Publishing...' : 'Publish'}</Button>
                         </FormShare>
                     </ShareMe>
                     <Posts>

@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 export const authContext  = createContext()
 
 export const AuthProvider = ({children}) => {
-    const navigate = useNavigate()
     const login = (email,password,setButtonState) => { 
     
         axios.post(process.env.REACT_APP_API_URL + "/login",
@@ -13,7 +12,7 @@ export const AuthProvider = ({children}) => {
              localStorage.setItem("token",r.data.token);
              localStorage.setItem("userData",JSON.stringify(r.data.userData))
              setButtonState(false)
-             window.location.href = "/home"
+             window.location.href = "/timeline"
             }).catch((e)=>{
                 setButtonState(false)
             alert(e)
@@ -25,7 +24,7 @@ export const AuthProvider = ({children}) => {
         axios.post(process.env.REACT_APP_API_URL + "/register",
         {name,email,password,pictureUrl }).then(()=>{
             setButtonState(false)
-            navigate("/")
+            window.location.href = "/"
          }).catch((e)=>{
             setButtonState(false)
             alert(e.response.data)

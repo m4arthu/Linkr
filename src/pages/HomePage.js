@@ -14,10 +14,11 @@ export default function TimelinePage({ click, setClick }) {
     const [clicked, setClicked] = useState(false);
     const [trends, setTrends] = useState([]);
     const navigate = useNavigate();
+    const [load, setLoad] = useState(true)
     const [posts, setPosts] = useState([]);
     const [hashArrayPub, setHashArrayPub] = useState([])
     const token = localStorage.getItem('token')
-    
+
     useEffect(() => {
 
         axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
@@ -25,6 +26,7 @@ export default function TimelinePage({ click, setClick }) {
             .catch(err => alert(err.response.data))
         axios.get(`${process.env.REACT_APP_API_URL}/timeline`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
+                setLoad(false)
                 setPosts(res.data)
                 setRefresh(false)
             })
@@ -33,41 +35,41 @@ export default function TimelinePage({ click, setClick }) {
             })
     }, [refresh, token]);
 
-    function handleText(x){
+    function handleText(x) {
         setText(x)
-        const hashArray =[]
+        const hashArray = []
         const str = x
         let rolling = false;
         let iSubstr;
         let fSubstr;
         for(let i=0; i<str.length; i++){
             if (rolling) {
-                if ( str[i] === ' ' || str[i] === '.' ||str[i] === ',' ||str[i] === ';' ||str[i] === '!' ||str[i] === '?' ||str[i] === '@' || str[i] === '#'){
+                if (str[i] === ' ' || str[i] === '.' || str[i] === ',' || str[i] === ';' || str[i] === '!' || str[i] === '?' || str[i] === '@' || str[i] === '#') {
                     fSubstr = i
                     rolling = false;
-                    hashArray.push (str.substring(iSubstr, fSubstr))
-                } else if ( i === str.length - 1){
+                    hashArray.push(str.substring(iSubstr, fSubstr))
+                } else if (i === str.length - 1) {
                     rolling = false;
-                    hashArray.push (str.substring(iSubstr))
+                    hashArray.push(str.substring(iSubstr))
 
                 }
             }
-            if (str[i] === '#'){
+            if (str[i] === '#') {
                 iSubstr = i
                 rolling = true;
             }
-           
+
         }
         const arraySemDuplicados = hashArray.filter((valor, indice, self) => {
             return self.indexOf(valor) === indice;
-          });
+        });
 
         setHashArrayPub(arraySemDuplicados)
     }
 
     function publish(e) {
         e.preventDefault();
-              
+
         setClicked(true);
 
         const body = { url, text, trends: hashArrayPub }
@@ -83,7 +85,7 @@ export default function TimelinePage({ click, setClick }) {
             .catch((err) => {
                 setClicked(false);
                 console.log(err)
-                alert('Houve um erro ao publicar seu link')
+                alert("There was an error publishing your link")
 
             })
     }
@@ -112,7 +114,7 @@ export default function TimelinePage({ click, setClick }) {
             <ContainerHome onClick={() => setClick(false)}>
                 <Timeline>
                     <h1>timeline</h1>
-                    <ShareMe>
+                    <ShareMe data-test="publish-box">
                         <Imagem>
                             <img src={picture} alt="Imagem de perfil"></img>
 
@@ -120,19 +122,20 @@ export default function TimelinePage({ click, setClick }) {
 
                         <FormShare onSubmit={(e) => { publish(e) }}>
                             <label htmlFor="url">What are you going to share today?</label>
-                            <input disabled={clicked} type="url" id="url" placeholder='http://...' value={url} onChange={(e) => { setUrl(e.target.value) }} required />
-                            <input disabled={clicked} type="text" placeholder='Awesome article about #javascript' value={text} onChange={(e) => { handleText(e.target.value) }} required />
-                            <Button disabled={clicked} type='submit'>{clicked ? 'Publishing...' : 'Publish'}</Button>
+                            <input disabled={clicked} data-test="link" type="url" id="url" placeholder='http://...' value={url} onChange={(e) => { setUrl(e.target.value) }} required />
+                            <input disabled={clicked} data-test="description" type="text" placeholder='Awesome article about #javascript' value={text} onChange={(e) => { handleText(e.target.value) }} />
+                            <Button data-test="publish-btn" disabled={clicked} type='submit'>{clicked ? 'Publishing...' : 'Publish'}</Button>
                         </FormShare>
                     </ShareMe>
                     <Posts>
-                        {posts.length > 0 ?
-                            posts.map(post => {
-                                return (
-                                    <PostComponent key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
-                                )
-                            })
-                            : <>There are no posts yet</>}
+                        {load ? <>Loading</> :
+                            posts.length > 0 ?
+                                posts.map(post => {
+                                    return (
+                                        <PostComponent key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
+                                    )
+                                })
+                                : <h1 data-test="message" >There are no posts yet</h1>}
                     </Posts>
 
                 </Timeline>
@@ -283,7 +286,7 @@ const Button = styled.button`
 const Posts = styled.ul`
     height:100%;
     width:100%;
-    margin-top:30px;
+    margin-top:27px;
     display:flex;
     flex-direction:column;
 `

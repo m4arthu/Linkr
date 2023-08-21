@@ -4,9 +4,9 @@ import { styled } from "styled-components"
 import { useNavigate } from "react-router-dom"
 import Modal from 'react-modal';
 import { RotatingLines } from "react-loader-spinner"
+import LikeButton from "./LikeButton";
 
 export default function PostComponent(props) {
-    console.log(props);
     const [editor, setEditor] = useState(false)
     const [newPost, setNewPost] = useState(props.post)
     const [meta, setMeta] = useState({})
@@ -73,11 +73,6 @@ export default function PostComponent(props) {
             .finally(() => setLoading(false))
     }
 
-    function likePost(id) {
-        console.log(id);
-        console.log(token);
-    }
-
     return (
         <PostContainer>
             <Modal className='Modal' isOpen={isOpen} >
@@ -106,10 +101,7 @@ export default function PostComponent(props) {
                 <Imagem>
                     <img onClick={() => navigate(`/user/${props.userId}`)} src={props.picture} alt="" />
                 </Imagem>
-                <div onClick={() => likePost(props.id)}>
-                    <ion-icon name="heart-outline"></ion-icon>
-                    <span>{props.num_likes} likes</span>
-                </div>
+                <LikeButton post = {props}/>
             </div>
             <div className="esquerda">
                 <h2 onClick={() => navigate(`/user/${props.userId}`)}>{props.username}</h2>

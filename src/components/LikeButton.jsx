@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react'
 import { FiHeart } from 'react-icons/fi'
 import { styled } from 'styled-components'
 
-export default function LikeButton({ posts }) {
+export default function LikeButton({ post }) {
+  console.log(post);
   const [isLiked, setIsLiked] = useState(false)
   const [countLike, setCountLike] = useState()
   const token = localStorage.getItem('token')
 
-  const postId = posts
+  const postId = post.id;
 
   console.log(`postID`, postId)
   console.log(`token`, token)
@@ -53,7 +54,7 @@ export default function LikeButton({ posts }) {
   return (
     <div>
       <StyledHeartIcon isLiked={isLiked} onClick={handleLiked} />
-      <span onClick={handleCountLike}>{countLike} Likes</span>
+      <span onClick={handleCountLike}>{countLike} {(countLike == 1) ? 'like' : 'likes'}</span>
       {/* <span>0 likes</span> */}
     </div>
   )

@@ -13,10 +13,10 @@ export const AuthProvider = ({children}) => {
              localStorage.setItem("token",r.data.token);
              localStorage.setItem("userData",JSON.stringify(r.data.userData))
              setButtonState(false)
-             window.location("/home")
+             window.location.href = "/home"
             }).catch((e)=>{
                 setButtonState(false)
-            alert(e.response.data)
+            alert(e)
         })
     }
     

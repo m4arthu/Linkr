@@ -128,8 +128,8 @@ export default function PostComponent(props) {
                     <>
                         Are you sure you want to delete this post?
                         <div>
-                            <button onClick={() => setIsOpen(false)}>No, go back</button>
-                            <button onClick={deletePost}>
+                            <button data-test='cancel' onClick={() => setIsOpen(false)}>No, go back</button>
+                            <button data-test='confirm' onClick={deletePost}>
                                 Yes, delete it
                             </button>
                         </div>
@@ -146,7 +146,7 @@ export default function PostComponent(props) {
                 <h2 data-test="username" onClick={() => navigate(`/user/${props.userId}`)}>{props.username}</h2>
                 {editor ?
                     (<SCform id={`edit${props.id}`}>
-                        <SCinput ref={reference} disabled={disabled} defaultValue={props.post} onKeyDown={e => (e.keyCode === 13 && !e.shiftKey ? handleEnter(e) : (e.keyCode === 27 ? resetFunction() : ''))} onChange={e =>  handleText(e.target.value)} />
+                        <SCinput data-test='edit-input' ref={reference} disabled={disabled} defaultValue={props.post} onKeyDown={e => (e.keyCode === 13 && !e.shiftKey ? handleEnter(e) : (e.keyCode === 27 ? resetFunction() : ''))} onChange={e =>  handleText(e.target.value)} />
                     </SCform>) : (<h3 data-test="description" >{props.post}</h3>)}
 
 
@@ -164,10 +164,10 @@ export default function PostComponent(props) {
                     </div></A>
                 {id === props.userId ?
                     <OwnerOptions>
-                        <IconEdit form={`edit${props.id}`} type={editor ? 'reset' : ''} onClick={() => editor ? setEditor(false) : openEditor()} editor={editor}>
+                        <IconEdit data-test='edit-btn' form={`edit${props.id}`} type={editor ? 'reset' : ''} onClick={() => editor ? setEditor(false) : openEditor()} editor={editor}>
                             <i className="dashicons dashicons-edit"></i>
                         </IconEdit>
-                        <IconDelete onClick={() => setIsOpen(true)}>
+                        <IconDelete data-test='delete-btn' onClick={() => setIsOpen(true)}>
                             <i className="dashicons dashicons-trash"></i>
                         </IconDelete>
                     </OwnerOptions> : ''

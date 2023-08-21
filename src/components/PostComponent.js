@@ -9,6 +9,7 @@ import LikeButton from "./LikeButton";
 export default function PostComponent(props) {
     const [editor, setEditor] = useState(false)
     const [newPost, setNewPost] = useState(props.post)
+    const [hashArrayPub, setHashArrayPub] = useState([])
     const [meta, setMeta] = useState({})
     const [loading, setLoading] = useState(false)
     const [disabled, setDisabled] = useState(false)
@@ -43,7 +44,8 @@ export default function PostComponent(props) {
     function handleEnter(e) {
         setDisabled(true)
         e.preventDefault()
-        axios.patch(`${process.env.REACT_APP_API_URL}/post/${props.id}`, { newPost }, { headers: { Authorization: `Bearer ${token}` } })
+        console.log({ newPost, trends: hashArrayPub })
+        axios.patch(`${process.env.REACT_APP_API_URL}/post/${props.id}`, { newPost, trends: hashArrayPub }, { headers: { Authorization: `Bearer ${token}` } })
             .then(() => {
                 props.setRefresh(true)
                 setEditor(false)
@@ -62,6 +64,37 @@ export default function PostComponent(props) {
         setEditor(true); 
     }
 
+    function handleText(x){
+        setNewPost(x)
+        const hashArray =[]
+        const str = x
+        let rolling = false;
+        let iSubstr;
+        let fSubstr;
+        for(let i=0; i<str.length; i++){
+            if (rolling) {
+                if ( str[i] === ' ' || str[i] === '.' ||str[i] === ',' ||str[i] === ';' ||str[i] === '!' ||str[i] === '?' ||str[i] === '@' || str[i] === '#'){
+                    fSubstr = i
+                    rolling = false;
+                    hashArray.push (str.substring(iSubstr, fSubstr))
+                } else if ( i === str.length - 1){
+                    rolling = false;
+                    hashArray.push (str.substring(iSubstr))
+
+                }
+            }
+            if (str[i] === '#'){
+                iSubstr = i
+                rolling = true;
+            }
+           
+        }
+        const arraySemDuplicados = hashArray.filter((valor, indice, self) => {
+            return self.indexOf(valor) === indice;
+          });
+
+        setHashArrayPub(arraySemDuplicados)
+    }
     function deletePost() {
         setLoading(true)
         axios.delete(`${process.env.REACT_APP_API_URL}/post/${props.id}`, { headers: { Authorization: `Bearer ${token}` } })
@@ -110,7 +143,7 @@ export default function PostComponent(props) {
                 <h2 onClick={() => navigate(`/user/${props.userId}`)}>{props.username}</h2>
                 {editor ?
                     (<SCform id={`edit${props.id}`}>
-                        <SCinput ref={reference} disabled={disabled} defaultValue={props.post} onKeyDown={e => (e.keyCode === 13 && !e.shiftKey ? handleEnter(e) : (e.keyCode === 27 ? resetFunction() : ''))} onChange={e => setNewPost(e.target.value)} />
+                        <SCinput ref={reference} disabled={disabled} defaultValue={props.post} onKeyDown={e => (e.keyCode === 13 && !e.shiftKey ? handleEnter(e) : (e.keyCode === 27 ? resetFunction() : ''))} onChange={(e) => { handleText(e.target.value) }}  />
                     </SCform>) : (<h3>{props.post}</h3>)}
                 <div className="card">
                     <div className="card-details">

@@ -40,7 +40,6 @@ export default function TimelinePage({ click, setClick }) {
         let rolling = false;
         let iSubstr;
         let fSubstr;
-        const regex = /[^\w\s]/g
         for(let i=0; i<str.length; i++){
             if (rolling) {
                 if ( str[i] === ' ' || str[i] === '.' ||str[i] === ',' ||str[i] === ';' ||str[i] === '!' ||str[i] === '?' ||str[i] === '@' || str[i] === '#'){

@@ -97,7 +97,7 @@ export default function LikeButton({ post, idLog }) {
     <div>
       <StyledHeartIcon isLiked={isLiked} onClick={handleLiked} data-test="like-btn"/>
       <Tooltip id="my-tooltip" data-test="tooltip"/>
-      <span onClick={handleCountLike} data-tooltip-id="my-tooltip" data-tooltip-content={text} data-test="counter" data-test="tooltip">{countLike} {(countLike == 1) ? 'like' : 'likes'}</span>
+      <span onClick={handleCountLike} data-tooltip-id="my-tooltip" data-tooltip-content={text} data-test="counter">{countLike} {(countLike == 1) ? 'like' : 'likes'}</span>
       {/* <span>0 likes</span> */}
     </div>
   )

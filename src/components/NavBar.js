@@ -78,8 +78,8 @@ export default function NavBar({click, setClick}) {
     function Pesquisa() {
         if (users !== '') {
             return(
-                <DivBuscas data-test="user-search">
-                    {users.map(user => <div onClick={() => navigate(`/user/${user.id}`)}><Imagem search={true}><img src={user.picture} alt=''/></Imagem> {user.username}</div> )}
+                <DivBuscas>
+                    {users.map(user => <div data-test="user-search" onClick={() => navigate(`/user/${user.id}`)}><Imagem search={true}><img src={user.picture} alt=''/></Imagem> {user.username}</div> )}
                 </DivBuscas>
             )
         }

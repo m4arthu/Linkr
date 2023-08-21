@@ -4,6 +4,7 @@ import { styled } from "styled-components"
 import { useNavigate } from "react-router-dom"
 import Modal from 'react-modal';
 import { RotatingLines } from "react-loader-spinner"
+import LikeButton from "./LikeButton";
 
 export default function PostComponent(props) {
     const [editor, setEditor] = useState(false)
@@ -13,7 +14,7 @@ export default function PostComponent(props) {
     const [disabled, setDisabled] = useState(false)
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
-    const {id} = JSON.parse(localStorage.getItem('userData'))
+    const { id } = JSON.parse(localStorage.getItem('userData'))
     const reference = useRef()
     const [isOpen, setIsOpen] = useState(false)
 
@@ -25,24 +26,25 @@ export default function PostComponent(props) {
     useEffect(() => {
         axios.get(`https://jsonlink.io/api/extract?url=${(props.articleUrl)}`)
             .then(res => {
-               setMeta(res.data)
-               console.log(res.data)
+                setMeta(res.data)
+                console.log(res.data)
             })
-            .catch((e)=> {console.log(e)
+            .catch((e) => {
+                console.log(e)
             })
     }, [])
 
 
-    function resetFunction(){
+    function resetFunction() {
         document.getElementById(`edit${props.id}`).reset()
         setEditor(false)
     }
 
-    function handleEnter(e){
+    function handleEnter(e) {
         setDisabled(true)
         e.preventDefault()
-        axios.patch(`${process.env.REACT_APP_API_URL}/post/${props.id}`, {newPost}, {headers: {Authorization: `Bearer ${token}`}})
-            .then( () => {
+        axios.patch(`${process.env.REACT_APP_API_URL}/post/${props.id}`, { newPost }, { headers: { Authorization: `Bearer ${token}` } })
+            .then(() => {
                 props.setRefresh(true)
                 setEditor(false)
                 setDisabled(false)
@@ -58,78 +60,77 @@ export default function PostComponent(props) {
     }
     function openEditor(){
         setEditor(true); 
-
     }
 
-    function deletePost(){
+    function deletePost() {
         setLoading(true)
-        axios.delete(`${process.env.REACT_APP_API_URL}/post/${props.id}`, {headers: {Authorization: `Bearer ${token}`}})
-        .then(() => {
-            props.setRefresh(true)
-            setIsOpen(false)
-        })
-        .catch(() => {
-            alert('Ops! Houve algum erro!')
-            setIsOpen(false)
-        })
-        .finally(() => setLoading(false))
+        axios.delete(`${process.env.REACT_APP_API_URL}/post/${props.id}`, { headers: { Authorization: `Bearer ${token}` } })
+            .then(() => {
+                props.setRefresh(true)
+                setIsOpen(false)
+            })
+            .catch(() => {
+                alert('Ops! Houve algum erro!')
+                setIsOpen(false)
+            })
+            .finally(() => setLoading(false))
     }
+
     return (
         <PostContainer>
             <Modal className='Modal' isOpen={isOpen} >
-                {loading ? 
-                <>
-                <RotatingLines
-                strokeColor="white"
-                strokeWidth="5"
-                animationDuration="1"
-                width="96"
-                visible={true}
-                />
-                </>
-                :
-                <>
-                Are you sure you want to delete this post?
-                <div>
-                    <button onClick={() => setIsOpen(false)}>No, go back</button>
-                    <button onClick={deletePost}> 
-                        Yes, delete it
-                    </button>
-                </div>
-                </>}
+                {loading ?
+                    <>
+                        <RotatingLines
+                            strokeColor="white"
+                            strokeWidth="5"
+                            animationDuration="1"
+                            width="96"
+                            visible={true}
+                        />
+                    </>
+                    :
+                    <>
+                        Are you sure you want to delete this post?
+                        <div>
+                            <button onClick={() => setIsOpen(false)}>No, go back</button>
+                            <button onClick={deletePost}>
+                                Yes, delete it
+                            </button>
+                        </div>
+                    </>}
             </Modal>
             <div className="direita">
                 <Imagem>
-                <img onClick={() => navigate(`/user/${props.userId}`)} src={props.picture} alt="" />
+                    <img onClick={() => navigate(`/user/${props.userId}`)} src={props.picture} alt="" />
                 </Imagem>
-                <div>
-                    <ion-icon name="heart-outline"></ion-icon>
-                    <span>{props.num_likes} likes</span>
-                </div>
+                <LikeButton post = {props} idLog={id}/>
             </div>
             <div className="esquerda">
                 <h2 onClick={() => navigate(`/user/${props.userId}`)}>{props.username}</h2>
-                {editor ? 
+                {editor ?
                     (<SCform id={`edit${props.id}`}>
-                        <SCinput ref={reference} disabled={disabled} defaultValue={props.post} onKeyDown={e => (e.keyCode === 13 && !e.shiftKey? handleEnter(e) : (e.keyCode === 27 ? resetFunction() : ''))} onChange={e => setNewPost(e.target.value)}/>
+                        <SCinput ref={reference} disabled={disabled} defaultValue={props.post} onKeyDown={e => (e.keyCode === 13 && !e.shiftKey ? handleEnter(e) : (e.keyCode === 27 ? resetFunction() : ''))} onChange={e => setNewPost(e.target.value)} />
                     </SCform>) : (<h3>{props.post}</h3>)}
                 <div className="card">
-                    <h2>{meta.title}</h2>
-                    {<img src={meta.images? meta.images[0]:""}  alt="Imagem da Matéria" />}
-                    <p>{meta.description}</p>
+                    <div className="card-details">
+                        <h2>{meta.title}</h2>
+                        <p>{meta.description}</p>
+                        <a href={props.articleUrl}>{props.articleUrl}</a>
+                    </div>
+                    {<img src={meta.images ? meta.images[0] : ""} alt="Imagem da Matéria" />}
 
-                    <a href={props.articleUrl}>Leia mais</a>
                 </div>
-            {id === props.userId ?
-                (<OwnerOptions>
-                    <IconEdit form={`edit${props.id}`} type={editor ? 'reset' : ''} onClick={() => editor ? setEditor(false) : openEditor() } editor={editor}>
-                        <i className="dashicons dashicons-edit"></i>
-                    </IconEdit>
-                    <IconDelete onClick={() => setIsOpen(true)}>
-                        <i className="dashicons dashicons-trash"></i>
-                    </IconDelete>
-                </OwnerOptions>)  :  ''
-            }
+                {id === props.userId ?
+                    <OwnerOptions>
+                        <IconEdit form={`edit${props.id}`} type={editor ? 'reset' : ''} onClick={() => editor ? setEditor(false) : openEditor()} editor={editor}>
+                            <i className="dashicons dashicons-edit"></i>
+                        </IconEdit>
+                        <IconDelete onClick={() => setIsOpen(true)}>
+                            <i className="dashicons dashicons-trash"></i>
+                        </IconDelete>
+                    </OwnerOptions> : ''
+                }
             </div>
 
         </PostContainer>
@@ -214,14 +215,14 @@ const PostContainer = styled.li`
     background-color: #171717;
     margin-top:20px;
     width: 611px;
-    height:276px;
     border-radius: 16px;
     padding: 15px;
     display: flex;
     gap: 20px;
-    position: relative;
+    position:relative;
     img{
-     width:100%;
+         max-width:153px;
+         border-radius: 0 12px 12px 0;
     }
 
     .direita{
@@ -261,6 +262,28 @@ const PostContainer = styled.li`
                 font-weight: 600;
                 font-size: 17px;
             }
+        }
+        .card{
+            display:flex;
+            h2{
+                margin-bottom: 10px;
+            }
+            p{
+                font-size: 14px;        
+            }
+            .card-details{
+                border-radius:12px 0px 0px 12px;
+                border:1px solid gray;
+                border-right:inherit;
+                padding: 10px 0 10px 10px;
+
+                a{
+                    text-decoration: none;
+                     font-size:14px;
+                     color:inherit;
+                }
+            }
+
         }
     }
 

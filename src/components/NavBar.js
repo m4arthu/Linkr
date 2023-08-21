@@ -79,7 +79,7 @@ export default function NavBar({click, setClick}) {
         if (users !== '') {
             return(
                 <DivBuscas data-test="user-search">
-                    {users.map(user => <div onClick={() => navigate(`/user/${user.id}`)}><img src={user.picture} alt=''/> {user.username}</div> )}
+                    {users.map(user => <div onClick={() => navigate(`/user/${user.id}`)}><Imagem search={true}><img src={user.picture} alt=''/></Imagem> {user.username}</div> )}
                 </DivBuscas>
             )
         }
@@ -110,10 +110,9 @@ export default function NavBar({click, setClick}) {
 }
 const Imagem = styled.div`
     box-sizing: border-box;
-    background-color: blue;
-    height:50px;
-    width:50px;
-    min-width: 50px;
+    height:${x => x.search ? '36px' : '50px'};
+    width:${x => x.search ? '36px' : '50px'};
+    min-width: ${x => x.search ? '36px' : '50px'};
     overflow: hidden;
     border-radius:100%;
     display: flex;
@@ -230,14 +229,23 @@ const DivBuscas = styled.div`
     color: #515151;
     font-family: 'lato';
     font-size: 19px;
-    img{
-        width: 39px;
-        height: 39px;
-        border-radius: 100%;
-    }
+
     >div{
         display: flex;
         align-items: center;
         gap: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 5px;
+        border-radius: 15px;
+        &:hover{
+            cursor: pointer;
+            color: black;
+            background-color: lightgray;
+        &:active{
+            background-color: darkgrey;
+        }
+        }
     }
+
 `

@@ -12,8 +12,8 @@ export const AuthProvider = ({children}) => {
          { email: email, password: password}).then((r)=>{
              localStorage.setItem("token",r.data.token);
              localStorage.setItem("userData",JSON.stringify(r.data.userData))
-             navigate("/home")
              setButtonState(false)
+             window.location("/home")
             }).catch((e)=>{
                 setButtonState(false)
             alert(e.response.data)

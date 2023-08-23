@@ -79,7 +79,7 @@ export default function NavBar({click, setClick}) {
         if (users !== '') {
             return(
                 <DivBuscas>
-                    {users.map(user => <div data-test="user-search" onClick={() => navigate(`/user/${user.id}`)}><Imagem search={true}><img src={user.picture} alt=''/></Imagem> {user.username}</div> )}
+                    {users.map(user => <div data-test="user-search" onClick={() => navigate(`/user/${user.id}`)}><Imagem search={true}><img src={user.picture} alt=''/></Imagem>{user.username}</div> )}
                 </DivBuscas>
             )
         }
@@ -93,7 +93,7 @@ export default function NavBar({click, setClick}) {
 
     return (
         <ContainerGeral onClick={logClose}>
-            <h1 onClick={() => navigate('/home')}>linkr</h1>
+            <h1 onClick={() => navigate('/timeline')}>linkr</h1>
             <div className="search">
                 <DebounceInput data-test="search"
                     debounceTimeout={300}

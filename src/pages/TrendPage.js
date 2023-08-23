@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PostComponent from "../components/PostComponent";
+import TrendsContainer from "../components/TrendContainer";
 
 export default function TimelinePage({click, setClick}) {
     const data = JSON.parse(localStorage.getItem("userData"));
@@ -33,26 +34,6 @@ export default function TimelinePage({click, setClick}) {
     console.log(trends);
     console.log(posts);
 
-
-    function TrendsContainer() {
-        if (trends.length === 0) {
-            return(
-                <TrendStyled data-test="trending">
-                    <h1>trending</h1>
-                </TrendStyled>
-            )
-        } else {
-            return(
-                <TrendStyled data-test="trending">
-                    <h1>trending</h1>
-                    <div>
-                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend.slice(1)}`, {state: {id: trend.id}})} data-test="hashtag">#{trend.trend.slice(1)}</p>)}
-                    </div>
-                </TrendStyled>
-            )
-        }
-    }
-
     return (
         <>
             <NavBar click={click} setClick={setClick}/>
@@ -69,7 +50,7 @@ export default function TimelinePage({click, setClick}) {
                     </Posts>
 
                 </Timeline>
-                <TrendsContainer />
+                <TrendsContainer trends={trends}/>
 
             </ContainerHome>
         </>
@@ -109,39 +90,4 @@ const Posts = styled.ul`
     flex-direction:column;
     gap: 20px;
     margin-top: 43px;
-`
-
-const TrendStyled = styled.div`
-    width: 301px;
-    background-color: #171717;
-    color: white;
-    border-radius: 16px;
-    margin-top: 160px;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    h1 {
-        font-family: 'Passion One', cursive;
-        font-size: 27px;
-        margin-left: 15px;
-        
-    }
-    div{
-        padding: 15px;
-        border-top: 1px solid #484848;
-        margin-top: 15px;
-    }
-    p {
-        font-family: Lato;
-        font-size: 19px;
-        font-weight: 700;
-        line-height: 23px;
-        letter-spacing: 0.05em;
-    }
-    p:hover{
-        text-decoration: underline;
-        cursor: pointer;
-    }
-    @media(max-width: 770px){
-        display:none;
-    }
 `

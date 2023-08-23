@@ -97,6 +97,7 @@ body {
 }
 html, body {
     background-color: #333333;
+	padding-bottom: 50px;
 }
 ol, ul {
 	list-style: none;

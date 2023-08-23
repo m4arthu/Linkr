@@ -136,13 +136,13 @@ const ContainerHome = styled.div`
     display: flex;
     justify-content:center;
     gap: 15px;
+
 `
 
 const Timeline = styled.div`
     box-sizing: border-box;
     padding-top: 78px;
     width:611px;
-    height:100%;
     font-family: 'Oswald', sans-serif;
     font-weight:700;
     font-size:43px;

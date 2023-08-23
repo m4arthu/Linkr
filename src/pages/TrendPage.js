@@ -66,7 +66,7 @@ const ContainerHome = styled.div`
 `
 
 const Timeline = styled.div`
-    padding-top: 78px;
+    padding-top: 60px;
     width:611px;
     height:100%;
     font-family: 'Oswald', sans-serif;
@@ -89,5 +89,5 @@ const Posts = styled.ul`
     display:flex;
     flex-direction:column;
     gap: 20px;
-    margin-top: 43px;
+    margin-top: 38px;
 `

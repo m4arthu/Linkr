@@ -79,7 +79,21 @@ export default function NavBar({click, setClick}) {
         if (users !== '') {
             return(
                 <DivBuscas>
-                    {users.map(user => <div data-test="user-search" onClick={() => navigate(`/user/${user.id}`)}><Imagem search={true}><img src={user.picture} alt=''/></Imagem>{user.username}</div> )}
+                    {users.map(user =>{ 
+                        if (user.seguidor != data.id){
+                            return (
+                                <div data-test="user-search" onClick={() => navigate(`/user/${user.id}`)}>
+                                    <Imagem search={true}><img src={user.picture} alt=''/></Imagem>{user.username}
+                                </div> 
+                            )
+                        } else{
+                            return (
+                                <div data-test="user-search" onClick={() => navigate(`/user/${user.id}`)}>
+                                    <Imagem search={true}><img src={user.picture} alt=''/></Imagem>{user.username}<span>•</span><span>following</span>
+                                </div> 
+                            )
+                        }
+                    })}
                 </DivBuscas>
             )
         }
@@ -229,6 +243,10 @@ const DivBuscas = styled.div`
     color: #515151;
     font-family: 'lato';
     font-size: 19px;
+    span{
+        color: #C5C5C5;
+        margin: none;
+    }
 
     >div{
         display: flex;

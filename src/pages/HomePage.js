@@ -18,10 +18,10 @@ export default function TimelinePage({ click, setClick }) {
     const [load, setLoad] = useState(true)
     const [posts, setPosts] = useState([]);
     const [hashArrayPub, setHashArrayPub] = useState([])
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
+    const [update, setUpdate] = useState(0);
 
     useEffect(() => {
-
         axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
             .then(res => setTrends(res.data))
             .catch(err => alert(err.response.data))
@@ -30,11 +30,25 @@ export default function TimelinePage({ click, setClick }) {
                 setLoad(false)
                 setPosts(res.data)
                 setRefresh(false)
+                setInterval(() => updatePosts(res.data.length), 15000);
             })
             .catch((err) => {
                 alert("An error occured while trying to fetch the posts, please refresh the page")
             })
     }, [refresh, token]);
+
+    function updatePosts(sizePosts){
+        console.log(sizePosts);
+        axios.get(`${process.env.REACT_APP_API_URL}/timeline`, { headers: { Authorization: `Bearer ${token}` } })
+            .then((res) => {
+                if (res.data.length > sizePosts){
+                    setUpdate(res.data.length - sizePosts);
+                }
+            })
+            .catch((err) => {
+                alert("An error occured while trying to fetch the posts, please refresh the page")
+            })
+    }
 
     function handleText(x) {
         setText(x)
@@ -91,6 +105,22 @@ export default function TimelinePage({ click, setClick }) {
             })
     }
 
+    function updatePage(){
+        setRefresh(true);
+        setUpdate(0);
+    }
+
+    function UpdateComponent() {
+        console.log(update);
+        if (update > 0) {
+            return(
+                <UpdateStyled onClick={updatePage}>
+                    {update} new posts, load more! <ion-icon name="refresh-outline"></ion-icon>
+                </UpdateStyled>
+            )
+        }
+    }
+
     return (
         <>
             <NavBar click={click} setClick={setClick} />
@@ -110,6 +140,7 @@ export default function TimelinePage({ click, setClick }) {
                             <Button data-test="publish-btn" disabled={clicked} type='submit'>{clicked ? 'Publishing...' : 'Publish'}</Button>
                         </FormShare>
                     </ShareMe>
+                    <UpdateComponent />
                     <Posts>
                         {load ? <>Loading</> :
                             posts.length > 0 ?
@@ -163,6 +194,7 @@ const ShareMe = styled.div`
     width:100%;
     height:209px;
     background-color: #FFFFFF;
+    margin-bottom: 27px;
     @media(max-width: 770px){
         border-radius: 0;
         height: 164px;
@@ -269,7 +301,23 @@ const Button = styled.button`
 const Posts = styled.ul`
     height:100%;
     width:100%;
-    margin-top:27px;
     display:flex;
     flex-direction:column;
+`
+const UpdateStyled = styled.div`
+    width: 100%;
+    height: 61px;
+    background-color: #1877F2;
+    border-radius: 16px;
+    font-size:14px;
+    font-family: 'Lato', sans-serif;
+    font-weight:700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    ion-icon{
+        margin-left: 5px;
+        font-size:20px;
+    }
 `

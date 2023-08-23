@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import PostComponent from "../components/PostComponent";
+import FollowButton from "../components/FollowButton";
 
 export default function UserPage() {
     const data = JSON.parse(localStorage.getItem("userData"));
@@ -48,12 +49,17 @@ export default function UserPage() {
             )
         }
     }
+
+
     return (
         <>
             <NavBar click={clicked} setClick={setClicked} />
             <ContainerHome>
                 <Timeline>
+                  <ContainerHeader>
                     <h1>{username}'s posts</h1>
+                    {data.id !== parseInt(id) && <FollowButton id={id} username={username} data={data} />}
+                  </ContainerHeader>
                     <Posts>
                         {posts.length > 0 ? posts.map(post => {
                                 return (
@@ -93,6 +99,23 @@ const Timeline = styled.div`
     @media(max-width: 770px){
         width:100vw;
     }
+`
+const ContainerHeader = styled.div`
+  width: 927px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  button {
+    font-family: Lato;
+    width: 112px;
+    height: 31px;
+    margin-right: 15px;
+    background-color: #1877f2;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 14px;
+  }
 `
 
 const Posts = styled.ul`

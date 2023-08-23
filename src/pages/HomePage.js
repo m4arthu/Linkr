@@ -2,7 +2,6 @@ import { styled } from "styled-components";
 import NavBar from "../components/NavBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import PostComponent from "../components/PostComponent";
 import TrendsContainer from "../components/TrendContainer";
 
@@ -14,17 +13,19 @@ export default function TimelinePage({ click, setClick }) {
     const [refresh, setRefresh] = useState();
     const [clicked, setClicked] = useState(false);
     const [trends, setTrends] = useState([]);
-    const navigate = useNavigate();
     const [load, setLoad] = useState(true)
     const [posts, setPosts] = useState([]);
     const [hashArrayPub, setHashArrayPub] = useState([])
     const token = localStorage.getItem('token')
 
     useEffect(() => {
-
         axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
-            .then(res => setTrends(res.data))
-            .catch(err => alert(err.response.data))
+        .then(res => setTrends(res.data))
+        .catch(err => console.log(err))
+    }, [])
+
+    useEffect(() => {
+
         axios.get(`${process.env.REACT_APP_API_URL}/timeline`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setLoad(false)
@@ -56,7 +57,7 @@ export default function TimelinePage({ click, setClick }) {
                 }
             }
             if (str[i] === '#') {
-                iSubstr = i
+                iSubstr = i+1
                 rolling = true;
             }
 
@@ -67,14 +68,12 @@ export default function TimelinePage({ click, setClick }) {
 
         setHashArrayPub(arraySemDuplicados)
     }
-
     function publish(e) {
         e.preventDefault();
 
         setClicked(true);
 
         const body = { url, text, trends: hashArrayPub }
-        console.log(body)
 
         axios.post(`${process.env.REACT_APP_API_URL}/timeline`, body, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {

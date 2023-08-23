@@ -2,16 +2,14 @@ import { styled } from "styled-components";
 import NavBar from "../components/NavBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import PostComponent from "../components/PostComponent";
 import TrendsContainer from "../components/TrendContainer";
 
 export default function TimelinePage({click, setClick}) {
-    const data = JSON.parse(localStorage.getItem("userData"));
     const [refresh, setRefresh] = useState();
     const [trends, setTrends] = useState([]);
     const [posts, setPosts] = useState([]);
-    const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
 
@@ -29,7 +27,7 @@ export default function TimelinePage({click, setClick}) {
              .then(res => setPosts(res.data))
              .catch(err => alert(err.response.data));
 
-    }, [id]);
+    }, [id, refresh]);
 
     console.log(trends);
     console.log(posts);

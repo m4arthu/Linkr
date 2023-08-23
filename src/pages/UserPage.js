@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import PostComponent from "../components/PostComponent";
 import FollowButton from "../components/FollowButton";
+import TrendsContainer from "../components/TrendContainer";
 
 export default function UserPage() {
     const data = JSON.parse(localStorage.getItem("userData"));
@@ -31,24 +32,7 @@ export default function UserPage() {
             .finally(() => setRefresh(false))
     }, [refresh]);
 
-    function TrendsContainer() {
-        if (trends.length == 0) {
-            return(
-                <TrendStyled data-test="trending">
-                    <h1>trending</h1>
-                </TrendStyled>
-            )
-        } else {
-            return(
-                <TrendStyled data-test="trending">
-                    <h1>trending</h1>
-                    <div>
-                        {trends.map(trend => <p onClick={() => navigate(`/hashtag/${trend.trend.slice(1)}`, {state: {id: trend.id}})} data-test="hashtag">#{trend.trend.slice(1)}</p>)}
-                    </div>
-                </TrendStyled>
-            )
-        }
-    }
+    
 
 
     return (
@@ -70,7 +54,7 @@ export default function UserPage() {
                     </Posts>
 
                 </Timeline>
-                <TrendsContainer />
+                <TrendsContainer trends={trends} />
 
             </ContainerHome>
         </>

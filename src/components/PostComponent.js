@@ -17,7 +17,6 @@ export default function PostComponent(props) {
     const token = localStorage.getItem('token')
     const { id } = JSON.parse(localStorage.getItem('userData'))
     const reference = useRef()
-    const [load, setLoad] = useState(true)
     const [isOpen, setIsOpen] = useState(false)
 
     useEffect(() => {
@@ -28,7 +27,6 @@ export default function PostComponent(props) {
     useEffect(() => {
         axios.get(`https://jsonlink.io/api/extract?url=${(props.articleUrl)}`)
             .then(res => {
-                setLoad(false)
                 setMeta(res.data)
                 console.log(res.data)
             })
@@ -86,7 +84,7 @@ export default function PostComponent(props) {
                 }
             }
             if (str[i] === '#'){
-                iSubstr = i
+                iSubstr = i+1
                 rolling = true;
             }
            
@@ -247,6 +245,9 @@ const Imagem = styled.div`
     justify-content: center;
     img{    
         height:100%;
+        &:hover{
+        cursor: pointer;
+        }
     }
     `
 

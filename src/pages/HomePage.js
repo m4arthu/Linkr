@@ -37,11 +37,11 @@ export default function TimelinePage({ click, setClick }) {
             })
     }, [refresh, token]);
 
-    function updatePosts(sizePosts){
+    function updatePosts(sizePosts) {
         console.log(sizePosts);
         axios.get(`${process.env.REACT_APP_API_URL}/timeline`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
-                if (res.data.length > sizePosts){
+                if (res.data.length > sizePosts) {
                     setUpdate(res.data.length - sizePosts);
                 }
             })
@@ -57,7 +57,7 @@ export default function TimelinePage({ click, setClick }) {
         let rolling = false;
         let iSubstr;
         let fSubstr;
-        for(let i=0; i<str.length; i++){
+        for (let i = 0; i < str.length; i++) {
             if (rolling) {
                 if (str[i] === ' ' || str[i] === '.' || str[i] === ',' || str[i] === ';' || str[i] === '!' || str[i] === '?' || str[i] === '@' || str[i] === '#') {
                     fSubstr = i
@@ -105,7 +105,7 @@ export default function TimelinePage({ click, setClick }) {
             })
     }
 
-    function updatePage(){
+    function updatePage() {
         setRefresh(true);
         setUpdate(0);
     }
@@ -113,7 +113,7 @@ export default function TimelinePage({ click, setClick }) {
     function UpdateComponent() {
         console.log(update);
         if (update > 0) {
-            return(
+            return (
                 <UpdateStyled onClick={updatePage}>
                     {update} new posts, load more! <ion-icon name="refresh-outline"></ion-icon>
                 </UpdateStyled>
@@ -143,13 +143,15 @@ export default function TimelinePage({ click, setClick }) {
                     <UpdateComponent />
                     <Posts>
                         {load ? <>Loading</> :
-                            posts.length > 0 ?
+                            typeof (posts) === 'string' ?
+                                <h1 data-test="message" >{posts}</h1>
+                                :
                                 posts.map(post => {
                                     return (
                                         <PostComponent key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
                                     )
                                 })
-                                : <h1 data-test="message" >There are no posts yet</h1>}
+                        }
                     </Posts>
 
                 </Timeline>

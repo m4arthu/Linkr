@@ -161,6 +161,7 @@ export default function TimelinePage({ click, setClick }) {
 }
 
 const ContainerHome = styled.div`
+    padding-top: 72px;
     box-sizing: border-box;
     height:100vh;
     width: 100vw;

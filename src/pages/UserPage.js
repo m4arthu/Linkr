@@ -60,6 +60,7 @@ export default function UserPage() {
 }
 
 const ContainerHome = styled.div`
+    padding-top:72px;
     height:100vh;
     display: flex;
     justify-content:center;

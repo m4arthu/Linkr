@@ -144,7 +144,9 @@ const ContainerGeral = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 15px;
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100vw;
     z-index:9;
     h1{

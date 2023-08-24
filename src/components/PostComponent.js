@@ -28,7 +28,7 @@ export default function PostComponent(props) {
         axios.get(`https://jsonlink.io/api/extract?url=${(props.articleUrl)}`)
             .then(res => {
                 setMeta(res.data)
-                console.log(res.data)
+                // console.log(res.data)
             })
             .catch((e) => {
                 console.log(e)
@@ -44,7 +44,7 @@ export default function PostComponent(props) {
     function handleEnter(e) {
         setDisabled(true)
         e.preventDefault()
-        console.log({ newPost, trends: hashArrayPub })
+        // console.log({ newPost, trends: hashArrayPub })
         axios.patch(`${process.env.REACT_APP_API_URL}/post/${props.id}`, { newPost, trends: hashArrayPub }, { headers: { Authorization: `Bearer ${token}` } })
             .then(() => {
                 props.setRefresh(true)

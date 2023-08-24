@@ -1,8 +1,12 @@
 import {createGlobalStyle} from  "styled-components"
 
 
-
 export const  Globalstyles = createGlobalStyle`
+.hydrated{
+	box-sizing: border-box;
+	padding-right: 0; 
+}
+
 .Modal {
 	box-sizing: border-box;
     position: fixed;
@@ -97,6 +101,7 @@ body {
 }
 html, body {
     background-color: #333333;
+	padding-bottom: 50px;
 }
 ol, ul {
 	list-style: none;

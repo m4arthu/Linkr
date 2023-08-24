@@ -32,15 +32,13 @@ export default function UserPage() {
             .finally(() => setRefresh(false))
     }, [refresh]);
 
-    
-
 
     return (
         <>
             <NavBar click={clicked} setClick={setClicked} />
             <ContainerHome>
                 <Timeline>
-                  <ContainerHeader>
+                <ContainerHeader>
                     <h1>{username}'s posts</h1>
                     {data.id !== parseInt(id) && <FollowButton id={id} username={username} data={data} />}
                   </ContainerHeader>
@@ -69,37 +67,46 @@ const ContainerHome = styled.div`
 `
 
 const Timeline = styled.div`
-    padding-top: 78px;
+    padding-top: 60px;
     width:611px;
     height:100%;
     font-family: 'Oswald', sans-serif;
     font-weight:700;
     font-size:43px;
     color: #FFFFFF;
-    h1 {
-        margin-left: 15px;
 
-    }
     @media(max-width: 770px){
         width:100vw;
     }
 `
 const ContainerHeader = styled.div`
-  width: 927px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    width: 95vw;
+    max-width: calc(100% + 301px);
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-left: 15px;
 
   button {
     font-family: Lato;
     width: 112px;
     height: 31px;
-    margin-right: 15px;
     background-color: #1877f2;
     color: #fff;
     border-radius: 5px;
     font-size: 14px;
+    margin-bottom: 15px;
+
   }
+  @media (max-width: 770px){
+        width: 100%;
+        margin-top: 100px;
+        button{
+            margin-right: 20px;
+        }
+    }
 `
 
 const Posts = styled.ul`
@@ -107,38 +114,6 @@ const Posts = styled.ul`
     width:100%;
     display:flex;
     flex-direction:column;
+    margin-top: 10px;
 `
 
-const TrendStyled = styled.div`
-    width: 301px;
-    background-color: #171717;
-    color: white;
-    border-radius: 16px;
-    margin-top: 160px;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    h1 {
-        font-family: 'Passion One', cursive;
-        font-size: 27px;
-        margin-left: 15px;
-    }
-    div{
-        padding: 15px;
-        border-top: 1px solid #484848;
-        margin-top: 15px;
-    }
-    p {
-        font-family: Lato;
-        font-size: 19px;
-        font-weight: 700;
-        line-height: 23px;
-        letter-spacing: 0.05em;
-    }
-    p:hover{
-        text-decoration: underline;
-        cursor: pointer;
-    }
-    @media(max-width: 770px){
-        display:none;
-    }
-`

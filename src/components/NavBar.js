@@ -105,23 +105,75 @@ export default function NavBar({click, setClick}) {
         }
     }
 
-    return (
+    return (<>
         <ContainerGeral onClick={logClose}>
             <h1 onClick={() => navigate('/timeline')}>linkr</h1>
-            <div className="search">
-                <DebounceInput data-test="search"
-                    debounceTimeout={300}
-                    value={text} 
-                    onChange={searchUser}
-                    placeholder="Search for people and friends"
-                />
-                <ion-icon name="search"></ion-icon>
-                <Pesquisa />
-            </div>
             <Profile />
         </ContainerGeral>
+        <SearchContainer>
+        <DebounceInput data-test="search"
+            debounceTimeout={300}
+            value={text} 
+            onChange={searchUser}
+            placeholder="Search for people and friends"
+        />
+        <ion-icon name="search"></ion-icon>
+        <Pesquisa />
+        </SearchContainer>
+        </>
     )
 }
+const SearchContainer = styled.div`
+    box-sizing: border-box;
+    position: fixed;
+    left: 15vw;
+    right: 15vw;
+    height: 72px;
+    width: 70vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #C6C6C6;
+    z-index: 10;
+    ion-icon{
+        margin-left: -40px;
+        font-size: 25px;
+        cursor: pointer;
+        z-index: 11;
+    }
+    input{
+        font-family:'lato',sans-serif;
+        padding: 10px;
+        height: 45px;
+        width: 563px;
+        border-radius: 8px;
+        border: none;
+        font-size: 15px;
+        z-index:10;
+    }
+
+    @media(max-width: 770px){
+        position: absolute;
+        top:80px;
+        width: 100vw;
+        height: 45px;
+        z-index: 1;
+        left: 0;
+        right: 0;
+
+        input{
+            width: 100%;
+            height: 100%;
+            margin-left: -15px;
+            z-index: 1;
+        }
+        ion-icon{
+            z-index: 2;
+
+        }
+        
+    }
+`
 const Imagem = styled.div`
     box-sizing: border-box;
     height:${x => x.search ? '36px' : '50px'};
@@ -143,7 +195,8 @@ const ContainerGeral = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
     position: fixed;
     top:0;
     left: 0;
@@ -154,45 +207,9 @@ const ContainerGeral = styled.div`
         color: white;
         font-size: 50px;
         cursor: pointer;
+        z-index: 50;
     }
-    .search{
-        display: flex;
-        align-items: center;
-        color: #C6C6C6;
-        position: relative;
-        ion-icon{
-            position: absolute;
-            right: 10px;
-            font-size: 25px;
-            cursor: pointer;
-            z-index: 11;
-        }
-        input{
-            font-family:'lato',sans-serif;
-            padding: 10px;
-            height: 45px;
-            width: 563px;
-            border-radius: 8px;
-            border: none;
-            font-size: 15px;
-            z-index:10;
-        }
-
-        @media(max-width: 770px){
-            position: absolute;
-            top:80px;
-            left: 10px;
-            right: 10px;
-            width: calc(100vw - 20px);
-            height: 45px;
-            input{
-                width: 100%;
-                height: 100%;
-            }
-            
-        }
-
-    }
+    
     .user{
         display: flex;
         align-items: center;

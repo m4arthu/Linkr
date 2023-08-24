@@ -78,6 +78,8 @@ const Timeline = styled.div`
 
     @media(max-width: 770px){
         width:100vw;
+        margin-top: 60px;
+
     }
 `
 
@@ -87,5 +89,5 @@ const Posts = styled.ul`
     display:flex;
     flex-direction:column;
     gap: 20px;
-    margin-top: 43px;
+    margin-top: 18px;
 `

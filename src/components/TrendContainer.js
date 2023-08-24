@@ -29,6 +29,10 @@ const TrendStyled = styled.div`
     margin-top: 160px;
     padding-top: 15px;
     padding-bottom: 15px;
+    height: 406px;
+    ::-webkit-scrollbar {
+        display: none;
+    }
     h1 {
         font-family: 'Passion One', cursive;
         font-size: 27px;
@@ -36,8 +40,13 @@ const TrendStyled = styled.div`
     }
     div{
         padding: 15px;
+        background-color: #171717;
         border-top: 1px solid #484848;
         margin-top: 15px;
+        height: 406px;
+        overflow: scroll;
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
     }
     p {
         font-family: Lato;

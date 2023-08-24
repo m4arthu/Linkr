@@ -56,6 +56,7 @@ export default function TimelinePage({click, setClick}) {
 }
 
 const ContainerHome = styled.div`
+    padding-top:72px;
     height:100vh;
     width: 100vw;
     display: flex;

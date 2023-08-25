@@ -37,12 +37,12 @@ export default function TimelinePage({ click, setClick }) {
     }, [])
 
     useEffect(() => {
+        setPage(0);
         axios.get(`${process.env.REACT_APP_API_URL}/timeline?page=${page}`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setLoad(false)
                 setPosts(res.data)
                 setHasMoreItems(res.data.length>=10)
-                setRefresh(false)
                 })
             .catch((err) => {
                 alert("An error occured while trying to fetch the posts, please refresh the page")
@@ -148,7 +148,8 @@ export default function TimelinePage({ click, setClick }) {
   
     function loadMoreItems(){
         console.log(page);
-        axios.get(`${process.env.REACT_APP_API_URL}/timeline?page=${page}`, { headers: { Authorization: `Bearer ${token}` } })
+        if (typeof posts[0] !== 'string'){
+            axios.get(`${process.env.REACT_APP_API_URL}/timeline?page=${page}`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setPosts([...posts, ...res.data]);
                 setHasMoreItems(res.data.length>=10);
@@ -157,6 +158,9 @@ export default function TimelinePage({ click, setClick }) {
             .catch((err) => {
                 alert("An error occured while trying to fetch the posts, please refresh the page")
             })
+        } else{
+            setHasMoreItems(false);
+        }
         
       };
 
@@ -188,12 +192,12 @@ export default function TimelinePage({ click, setClick }) {
                             hasMore={hasMoreItems}
                             loader={<LoadMore/>}
                         >
-                            {posts.length > 0 ? posts.map(post => {
+                            {(posts.length > 0 && typeof posts[0] !== 'string') ? posts.map(post => {
                                         return (
                                             <PostComponent followingArray={followingArray} key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} num_reposts={post.num_reposts} id={post.id} />
                                         )
                                     })
-                                    : <div data-test="message" className="nobody">You don't follow anyone yet. Search for new friends!</div>
+                                    : <div data-test="message" className="nobody">{posts}</div>
                             }
                         </InfiniteScroll>
                     </Posts>

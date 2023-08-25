@@ -37,6 +37,9 @@ export default function UserPage() {
         axios.get(`${process.env.REACT_APP_API_URL}/user/${id}?page=${page}`)
             .then(res => {
                 setPosts(res.data.posts)
+                if (res.data.posts.length <= 0) {
+                    setHasMoreItems(false);
+                }
                 setUsername(res.data.username)
             })
             .catch(console.log)

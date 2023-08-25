@@ -82,13 +82,13 @@ export default function NavBar({click, setClick}) {
                     {users.map(user =>{ 
                         if (user.seguidor != data.id){
                             return (
-                                <div data-test="user-search" onClick={() => navigate(`/user/${user.id}`)}>
+                                <div data-test="user-search" onClick={() =>{ navigate(`/user/${user.id}`); window.location.reload()}}>
                                     <Imagem search={true}><img src={user.picture} alt=''/></Imagem>{user.username}
                                 </div> 
                             )
                         } else{
                             return (
-                                <div data-test="user-search" onClick={() => navigate(`/user/${user.id}`)}>
+                                <div data-test="user-search" onClick={() =>{ navigate(`/user/${user.id}`); window.location.reload()}}>
                                     <Imagem search={true}><img src={user.picture} alt=''/></Imagem>{user.username}<span>•</span><span>following</span>
                                 </div> 
                             )

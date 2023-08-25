@@ -9,7 +9,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import LoadMore from "../components/LoadMore";
 
 
-export default function TimelinePage({click, setClick}) {
+export default function TrendPage({click, setClick}) {
     const [refresh, setRefresh] = useState();
     const [trends, setTrends] = useState([]);
     const [posts, setPosts] = useState([]);

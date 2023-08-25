@@ -44,7 +44,7 @@ export default function FollowButton({ id }) {
 
   return (
     <div>
-      <button onClick={handleFollow} disabled={isRequesting}>
+      <button onClick={handleFollow} disabled={isRequesting} data-test="follow-btn">
         {isRequesting ? 'Aguarde...' : following ? 'Unfollow' : 'Follow'}
       </button>
     </div>

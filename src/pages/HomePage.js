@@ -136,11 +136,12 @@ export default function TimelinePage({ click, setClick }) {
         console.log(update);
         if (update > 0) {
             return (
-                <UpdateStyled onClick={updatePage}>
+                <UpdateStyled onClick={updatePage}  data-test="load-btn">
                     {update} new posts, load more! <ion-icon name="refresh-outline"></ion-icon>
                 </UpdateStyled>
             )
         }
+        setUpdate(0);
     }
     console.log(posts);
     
@@ -192,7 +193,7 @@ export default function TimelinePage({ click, setClick }) {
                                             <PostComponent followingArray={followingArray} key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} num_reposts={post.num_reposts} id={post.id} />
                                         )
                                     })
-                                    : <>There are no posts yet</>
+                                    : <div data-test="message" className="nobody">You don't follow anyone yet. Search for new friends!</div>
                             }
                         </InfiniteScroll>
                     </Posts>
@@ -351,6 +352,11 @@ const Posts = styled.ul`
     width:100%;
     display:flex;
     flex-direction:column;
+    .nobody{
+        font-size: 24px;
+        font-weight: 400;
+        text-align: center;
+    }
 `
 const UpdateStyled = styled.div`
     width: 100%;

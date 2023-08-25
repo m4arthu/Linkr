@@ -74,7 +74,7 @@ export default function UserPage() {
                             pageStart={0}
                             loadMore={loadMoreItems}
                             hasMore={hasMoreItems}
-                            loader={<LoadMore />}
+                            loader={<LoadMore page={page}/>}
                         >
                             {posts.length > 0 ? posts.map(post => {
                                         return (

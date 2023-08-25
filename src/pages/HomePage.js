@@ -190,7 +190,7 @@ export default function TimelinePage({ click, setClick }) {
                             pageStart={0}
                             loadMore={loadMoreItems}
                             hasMore={hasMoreItems}
-                            loader={<LoadMore/>}
+                            loader={<LoadMore page={page}/>}
                         >
                             {(posts.length > 0 && typeof posts[0] !== 'string') ? posts.map(post => {
                                         return (

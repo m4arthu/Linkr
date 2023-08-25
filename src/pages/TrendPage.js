@@ -6,6 +6,7 @@ import { useLocation, useParams } from "react-router-dom";
 import PostComponent from "../components/PostComponent";
 import TrendsContainer from "../components/TrendContainer";
 import InfiniteScroll from 'react-infinite-scroller';
+import LoadMore from "../components/LoadMore";
 
 
 export default function TimelinePage({click, setClick}) {
@@ -30,7 +31,7 @@ export default function TimelinePage({click, setClick}) {
         axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
              .then(res => setTrends(res.data))
              .catch(err => alert(err.response.data));
-        axios.get(`${process.env.REACT_APP_API_URL}/hashtag/${id}`)
+        axios.get(`${process.env.REACT_APP_API_URL}/hashtag/${id}?page=${page}`)
              .then(res => {
                 setPosts(res.data)
                 setHasMoreItems(res.data.length>=10)
@@ -64,7 +65,7 @@ export default function TimelinePage({click, setClick}) {
                             pageStart={0}
                             loadMore={loadMoreItems}
                             hasMore={hasMoreItems}
-                            loader={<div key={0}>Loading...</div>}
+                            loader={<LoadMore />}
                         >
                             {posts.length > 0 ? posts.map(post => {
                                         return (

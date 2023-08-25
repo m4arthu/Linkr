@@ -5,6 +5,7 @@ import axios from "axios";
 import PostComponent from "../components/PostComponent";
 import TrendsContainer from "../components/TrendContainer";
 import InfiniteScroll from 'react-infinite-scroller';
+import LoadMore from "../components/LoadMore";
 
 export default function TimelinePage({ click, setClick }) {
     const data = JSON.parse(localStorage.getItem("userData"));
@@ -22,6 +23,7 @@ export default function TimelinePage({ click, setClick }) {
     const [update, setUpdate] = useState(0);
     const [followingArray, setFollowingArray] = useState([])
     let [page, setPage] = useState(0);  
+    const [all, setAll] = useState([]);
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/followers`, {headers: {Authorization: `Bearer ${token}`}})
         .then(res =>{
@@ -41,25 +43,33 @@ export default function TimelinePage({ click, setClick }) {
                 setPosts(res.data)
                 setHasMoreItems(res.data.length>=10)
                 setRefresh(false)
-                // setInterval(() => updatePosts(res.data.length), 15000);
                 })
+            .catch((err) => {
+                alert("An error occured while trying to fetch the posts, please refresh the page")
+            })
+        axios.get(`${process.env.REACT_APP_API_URL}/timeline?page=all`, { headers: { Authorization: `Bearer ${token}` } })
+            .then((res) => {
+                setAll(res.data);
+                setInterval(() => updatePosts(res.data.length), 15000);
+            })
             .catch((err) => {
                 alert("An error occured while trying to fetch the posts, please refresh the page")
             })
     }, [refresh, token]);
 
-    // function updatePosts(sizePosts) {
-    //     console.log(sizePosts);
-    //     axios.get(`${process.env.REACT_APP_API_URL}/timeline?page=0`, { headers: { Authorization: `Bearer ${token}` } })
-    //         .then((res) => {
-    //             if (res.data.length > sizePosts) {
-    //                 setUpdate(res.data.length - sizePosts);
-    //             }
-    //         })
-    //         .catch((err) => {
-    //             alert("An error occured while trying to fetch the posts, please refresh the page")
-    //         })
-    // }
+    function updatePosts(sizePosts) {
+        console.log(sizePosts);
+        axios.get(`${process.env.REACT_APP_API_URL}/timeline?page=all`, { headers: { Authorization: `Bearer ${token}` } })
+            .then((res) => {
+                if (res.data.length > sizePosts) {
+                    setUpdate(res.data.length - sizePosts);
+                    setAll(res.data);
+                }
+            })
+            .catch((err) => {
+                alert("An error occured while trying to fetch the posts, please refresh the page")
+            })
+    }
 
     function handleText(x) {
         setText(x)
@@ -115,7 +125,10 @@ export default function TimelinePage({ click, setClick }) {
     }
 
     function updatePage() {
-        setRefresh(true);
+        console.log(all)
+        for (let i=update-1; i>=0; i--){
+            setPosts([all[i], ...posts]);
+        }
         setUpdate(0);
     }
 
@@ -145,6 +158,7 @@ export default function TimelinePage({ click, setClick }) {
             })
         
       };
+
   
     return (
         <>
@@ -171,17 +185,14 @@ export default function TimelinePage({ click, setClick }) {
                             pageStart={0}
                             loadMore={loadMoreItems}
                             hasMore={hasMoreItems}
-                            loader={<div key={0}>Loading...</div>}
+                            loader={<LoadMore/>}
                         >
-                            {load ? <>Loading</> :
-                                typeof (posts) === 'string' ?
-                                    <h1 data-test="message" >{posts}</h1>
-                                    :
-                                    posts.map(post => {
+                            {posts.length > 0 ? posts.map(post => {
                                         return (
                                             <PostComponent followingArray={followingArray} key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} num_reposts={post.num_reposts} id={post.id} />
                                         )
                                     })
+                                    : <>There are no posts yet</>
                             }
                         </InfiniteScroll>
                     </Posts>

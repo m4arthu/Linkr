@@ -7,6 +7,7 @@ import PostComponent from "../components/PostComponent";
 import FollowButton from "../components/FollowButton";
 import InfiniteScroll from 'react-infinite-scroller';
 import TrendsContainer from "../components/TrendContainer";
+import LoadMore from "../components/LoadMore";
 
 export default function UserPage() {
     const data = JSON.parse(localStorage.getItem("userData"));
@@ -33,7 +34,7 @@ export default function UserPage() {
         axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
              .then(res => setTrends(res.data))
              .catch(err => alert(err.response.data));
-        axios.get(`${process.env.REACT_APP_API_URL}/user/${id}`)
+        axios.get(`${process.env.REACT_APP_API_URL}/user/${id}?page=${page}`)
             .then(res => {
                 setPosts(res.data.posts)
                 setUsername(res.data.username)
@@ -70,7 +71,7 @@ export default function UserPage() {
                             pageStart={0}
                             loadMore={loadMoreItems}
                             hasMore={hasMoreItems}
-                            loader={<div key={0}>Loading...</div>}
+                            loader={<LoadMore />}
                         >
                             {posts.length > 0 ? posts.map(post => {
                                         return (

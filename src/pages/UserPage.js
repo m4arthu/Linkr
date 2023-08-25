@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import PostComponent from "../components/PostComponent";
 import FollowButton from "../components/FollowButton";
+import InfiniteScroll from 'react-infinite-scroller';
 import TrendsContainer from "../components/TrendContainer";
 
 export default function UserPage() {
@@ -16,6 +17,8 @@ export default function UserPage() {
     const [posts, setPosts] = useState([]);
     const [username, setUsername] = useState('');
     const [followingArray, setFollowingArray] = useState([])
+    let [page, setPage] = useState(0); 
+    const [hasMoreItems, setHasMoreItems] = useState(true);
     const token = localStorage.getItem('token');
     
 
@@ -39,6 +42,19 @@ export default function UserPage() {
             .finally(() => setRefresh(false))
     }, [refresh]);
 
+    function loadMoreItems(){
+        console.log(page);
+        axios.get(`${process.env.REACT_APP_API_URL}/user/${id}?page=${page}`, { headers: { Authorization: `Bearer ${token}` } })
+            .then((res) => {
+                setPosts([...posts, ...res.data]);
+                setHasMoreItems(res.data.length>=10);
+                setPage(page+1);
+                })
+            .catch((err) => {
+                alert("An error occured while trying to fetch the posts, please refresh the page")
+            })
+        
+      };
 
     return (
         <>
@@ -50,12 +66,20 @@ export default function UserPage() {
                     {data.id !== parseInt(id) && <FollowButton id={id} username={username} data={data} />}
                   </ContainerHeader>
                     <Posts>
-                        {posts.length > 0 ? posts.map(post => {
-                                return (
-                                    <PostComponent followingArray={followingArray} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
-                                )
-                            })
-                            : <>There are no posts yet</>}
+                    <InfiniteScroll
+                            pageStart={0}
+                            loadMore={loadMoreItems}
+                            hasMore={hasMoreItems}
+                            loader={<div key={0}>Loading...</div>}
+                        >
+                            {posts.length > 0 ? posts.map(post => {
+                                        return (
+                                            <PostComponent followingArray={followingArray} key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} num_reposts={post.num_reposts} id={post.id} />
+                                        )
+                                    })
+                                    : <>There are no posts yet</>
+                            }
+                        </InfiniteScroll>
                     </Posts>
 
                 </Timeline>

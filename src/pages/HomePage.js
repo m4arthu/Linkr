@@ -177,7 +177,7 @@ export default function TimelinePage({ click, setClick }) {
                                 typeof (posts) === 'string' ?
                                     <h1 data-test="message" >{posts}</h1>
                                     :
-                                    /*this.state.*/posts.map(post => {
+                                    posts.map(post => {
                                         return (
                                             <PostComponent followingArray={followingArray} key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} num_reposts={post.num_reposts} id={post.id} />
                                         )

@@ -16,6 +16,7 @@ export default function PostComponent(props) {
     const [hashArrayPub, setHashArrayPub] = useState([])
     const [meta, setMeta] = useState({})
     const [loading, setLoading] = useState(false)
+    const [frase,setFrase] = useState('')
     const [disabled, setDisabled] = useState(false)
     const [commentsArray, setCommentsArray] = useState([])
     const navigate = useNavigate()
@@ -27,8 +28,6 @@ export default function PostComponent(props) {
     const [repostOpened, setRepostsOpened] = useState(false)
     const [commentText, setCommentText] = useState('')
     const [refresh, setRefresh] = useState(false)
-
-    
 
     useEffect(() => {
         setRefresh(false)
@@ -137,6 +136,20 @@ export default function PostComponent(props) {
             .finally(() => setLoading(false))
     }
 
+    function repost() {
+        setLoading(true)
+        axios.post(`${process.env.REACT_APP_API_URL}/timeline/${props.id}`, { headers: { Authorization: `Bearer ${token}` } })
+            .then(() => {
+                props.setRefresh(true)
+                setIsOpen(false)
+            })
+            .catch(() => {
+                alert('Ops! Houve algum erro!')
+                setIsOpen(false)
+            })
+            .finally(() => setLoading(false))
+    }
+
     return (
         <>
         <PostContainer data-test="post">
@@ -153,11 +166,11 @@ export default function PostComponent(props) {
                     </>
                     :
                     <>
-                        Are you sure you want to delete this post?
+                        {frase[0]}
                         <div>
                             <button data-test='cancel' onClick={() => setIsOpen(false)}>No, go back</button>
-                            <button data-test='confirm' onClick={deletePost}>
-                                Yes, delete it
+                            <button data-test='confirm' onClick={frase[1]==='Yes, delete it'?deletePost:repost}>
+                                {frase[1]}
                             </button>
                         </div>
                     </>}
@@ -174,7 +187,10 @@ export default function PostComponent(props) {
                     <p>{commentsArray.length} {commentsArray.length === 1 ? 'comment' :'comments'}</p>
                 </CommentBtnContainer>
 
-                <RepostBtnContainer repostOpened={repostOpened} onClick={() => repostOpened ? setRepostsOpened(false) : setRepostsOpened(true)}>
+                <RepostBtnContainer repostOpened={repostOpened} onClick={() => {
+                    setIsOpen(true)
+                    setFrase(['Do you want to re-post this link?','Yes, share!'])
+                    repostOpened ? setRepostsOpened(false) : setRepostsOpened(true)}}>
                     <BsRepeat size='21px'/>
                     <p>{props.num_reposts} {props.num_reposts === 1 ? 'repost' :'reposts'}</p>
                 </RepostBtnContainer>
@@ -204,7 +220,9 @@ export default function PostComponent(props) {
                         <IconEdit data-test='edit-btn' form={`edit${props.id}`} type={editor ? 'reset' : ''} onClick={() => editor ? setEditor(false) : openEditor()} editor={editor}>
                             <i className="dashicons dashicons-edit"></i>
                         </IconEdit>
-                        <IconDelete data-test='delete-btn' onClick={() => setIsOpen(true)}>
+                        <IconDelete data-test='delete-btn' onClick={() => {
+                            setFrase(['Are you sure you want to delete this post?','Yes, delete it'])
+                            setIsOpen(true)}}>
                             <i className="dashicons dashicons-trash"></i>
                         </IconDelete>
                     </OwnerOptions> : ''

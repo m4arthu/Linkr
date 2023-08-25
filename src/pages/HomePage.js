@@ -116,6 +116,7 @@ export default function TimelinePage({ click, setClick }) {
                 setText('')
                 setRefresh(true)
                 setPage(0);
+                window.location.reload();
             })
             .catch((err) => {
                 setClicked(false);
@@ -131,6 +132,7 @@ export default function TimelinePage({ click, setClick }) {
             setPosts([all[i], ...posts]);
         }
         setUpdate(0);
+        window.location.reload();
     }
 
     function UpdateComponent() {

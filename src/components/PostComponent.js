@@ -138,12 +138,14 @@ export default function PostComponent(props) {
 
     function repost() {
         setLoading(true)
+        console.log(token)
         axios.post(`${process.env.REACT_APP_API_URL}/timeline/${props.id}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(() => {
                 props.setRefresh(true)
                 setIsOpen(false)
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log(err)
                 alert('Ops! Houve algum erro!')
                 setIsOpen(false)
             })

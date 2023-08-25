@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import PostComponent from "../components/PostComponent";
 import TrendsContainer from "../components/TrendContainer";
+import InfiniteScroll from 'react-infinite-scroller';
 
 export default function TimelinePage({ click, setClick }) {
     const data = JSON.parse(localStorage.getItem("userData"));
@@ -15,11 +16,12 @@ export default function TimelinePage({ click, setClick }) {
     const [trends, setTrends] = useState([]);
     const [load, setLoad] = useState(true)
     const [posts, setPosts] = useState([]);
+    const [hasMoreItems, setHasMoreItems] = useState(true);
     const [hashArrayPub, setHashArrayPub] = useState([])
     const token = localStorage.getItem('token');
     const [update, setUpdate] = useState(0);
     const [followingArray, setFollowingArray] = useState([])
-    
+    let [page, setPage] = useState(0);  
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/followers`, {headers: {Authorization: `Bearer ${token}`}})
         .then(res =>{
@@ -33,31 +35,31 @@ export default function TimelinePage({ click, setClick }) {
     }, [])
 
     useEffect(() => {
-
-        axios.get(`${process.env.REACT_APP_API_URL}/timeline`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`${process.env.REACT_APP_API_URL}/timeline?page=${page}`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setLoad(false)
                 setPosts(res.data)
+                setHasMoreItems(res.data.length>=10)
                 setRefresh(false)
-                setInterval(() => updatePosts(res.data.length), 15000);
-            })
+                // setInterval(() => updatePosts(res.data.length), 15000);
+                })
             .catch((err) => {
                 alert("An error occured while trying to fetch the posts, please refresh the page")
             })
     }, [refresh, token]);
 
-    function updatePosts(sizePosts) {
-        console.log(sizePosts);
-        axios.get(`${process.env.REACT_APP_API_URL}/timeline`, { headers: { Authorization: `Bearer ${token}` } })
-            .then((res) => {
-                if (res.data.length > sizePosts) {
-                    setUpdate(res.data.length - sizePosts);
-                }
-            })
-            .catch((err) => {
-                alert("An error occured while trying to fetch the posts, please refresh the page")
-            })
-    }
+    // function updatePosts(sizePosts) {
+    //     console.log(sizePosts);
+    //     axios.get(`${process.env.REACT_APP_API_URL}/timeline?page=0`, { headers: { Authorization: `Bearer ${token}` } })
+    //         .then((res) => {
+    //             if (res.data.length > sizePosts) {
+    //                 setUpdate(res.data.length - sizePosts);
+    //             }
+    //         })
+    //         .catch((err) => {
+    //             alert("An error occured while trying to fetch the posts, please refresh the page")
+    //         })
+    // }
 
     function handleText(x) {
         setText(x)
@@ -128,18 +130,21 @@ export default function TimelinePage({ click, setClick }) {
         }
     }
     console.log(posts);
-    // this.state = {
-    //     items: [], // Array de itens a serem exibidos
-    //     hasMoreItems: true, // Indica se há mais itens para carregar
-    //   };
-    // }
+    
   
-    // loadMoreItems = (page) => {
-    //     this.setState((prevState) => ({
-    //         items: [...prevState.items, ...newItems],
-    //         hasMoreItems: hasMore,
-    //       }));
-    // };
+    function loadMoreItems(){
+        console.log(page);
+        axios.get(`${process.env.REACT_APP_API_URL}/timeline?page=${page}`, { headers: { Authorization: `Bearer ${token}` } })
+            .then((res) => {
+                setPosts([...posts, ...res.data]);
+                setHasMoreItems(res.data.length>=10);
+                setPage(page+1);
+                })
+            .catch((err) => {
+                alert("An error occured while trying to fetch the posts, please refresh the page")
+            })
+        
+      };
   
     return (
         <>
@@ -162,12 +167,12 @@ export default function TimelinePage({ click, setClick }) {
                     </ShareMe>
                     <UpdateComponent />
                     <Posts>
-                        {/* <InfiniteScroll
+                        <InfiniteScroll
                             pageStart={0}
-                            loadMore={this.loadMoreItems}
-                            hasMore={this.state.hasMoreItems}
+                            loadMore={loadMoreItems}
+                            hasMore={hasMoreItems}
                             loader={<div key={0}>Loading...</div>}
-                        > */}
+                        >
                             {load ? <>Loading</> :
                                 typeof (posts) === 'string' ?
                                     <h1 data-test="message" >{posts}</h1>
@@ -178,7 +183,7 @@ export default function TimelinePage({ click, setClick }) {
                                         )
                                     })
                             }
-                        {/* </InfiniteScroll> */}
+                        </InfiniteScroll>
                     </Posts>
 
                 </Timeline>

@@ -182,9 +182,9 @@ export default function PostComponent(props) {
                 </Imagem>
                 <LikeButton post={props} idLog={id} />
 
-                <CommentBtnContainer commentsOpened={commentsOpened} onClick={() => commentsOpened ? setCommentsOpened(false) : setCommentsOpened(true)}>
-                    <AiOutlineComment size='21px'/>
-                    <p>{commentsArray.length} {commentsArray.length === 1 ? 'comment' :'comments'}</p>
+                <CommentBtnContainer data-test="comment-btn" commentsOpened={commentsOpened} onClick={() => commentsOpened ? setCommentsOpened(false) : setCommentsOpened(true)}>
+                    <AiOutlineComment size='21px' data-test="comment-btn" />
+                    <p data-test="comment-counter">{commentsArray.length} {commentsArray.length === 1 ? 'comment' :'comments'}</p>
                 </CommentBtnContainer>
 
                 <RepostBtnContainer repostOpened={repostOpened} onClick={() => {
@@ -230,11 +230,11 @@ export default function PostComponent(props) {
             </div>
         </PostContainer>
         {commentsOpened ? 
-            <CommentsWindow >
+            <CommentsWindow data-test="comment-box">
                 <CommentsContainer>
                     {commentsArray ? 
                     commentsArray.map(x => {
-                        return <CommentComponent followingArray={props.followingArray} picture={x.picture} username={x.username} id={x.id} userId={x.userId} comment={x.comment} owner ={x.owner} />
+                        return <CommentComponent data-test="comment" followingArray={props.followingArray} picture={x.picture} username={x.username} id={x.id} userId={x.userId} comment={x.comment} owner ={x.owner} />
                     })
                     :
                     <></>}
@@ -243,12 +243,12 @@ export default function PostComponent(props) {
                     <CommentImagem>
                         <img src={picture} />
                     </CommentImagem>
-                    <input 
+                    <input data-test="comment-input"
                     type='text'
                     placeholder="write a comment..."
                     onChange={x => setCommentText(x.target.value)}
                     value={commentText}/>
-                    <FiSend onClick={() => sendComment()} className='icon' size='20px'/>
+                    <FiSend data-test="comment-submit" onClick={() => sendComment()} className='icon' size='20px'/>
                 </form>
             </CommentsWindow>
             :

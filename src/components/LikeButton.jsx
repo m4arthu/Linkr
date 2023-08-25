@@ -31,6 +31,7 @@ export default function LikeButton({ post, idLog }) {
       })
       axios.get(`${process.env.REACT_APP_API_URL}/usersliked/${postId}`)
            .then(res => {
+              setText('')
               setUsersLiked(res.data)
               res.data.forEach(user => {
                   if (user.userId == idLog){

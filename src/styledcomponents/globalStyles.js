@@ -6,7 +6,12 @@ export const  Globalstyles = createGlobalStyle`
 	box-sizing: border-box;
 	padding-right: 0; 
 }
-
+.ReactModal__Overlay--after-open{
+	position: fixed;
+	inset: 0px;
+	background-color: rgba(255, 255, 255, 0.75);
+	z-index: 2;
+}
 .Modal {
 	box-sizing: border-box;
     position: fixed;

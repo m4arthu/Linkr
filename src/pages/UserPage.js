@@ -15,11 +15,18 @@ export default function UserPage() {
     const [trends, setTrends] = useState([]);
     const [posts, setPosts] = useState([]);
     const [username, setUsername] = useState('');
+    const [followingArray, setFollowingArray] = useState([])
+    const token = localStorage.getItem('token');
     
 
     const navigate = useNavigate();
 
     useEffect(() => {
+            axios.get(`${process.env.REACT_APP_API_URL}/followers`, {headers: {Authorization: `Bearer ${token}`}})
+            .then(res =>{
+                setFollowingArray(res.data)
+            })
+            .catch(err => console.log(err))
         axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
              .then(res => setTrends(res.data))
              .catch(err => alert(err.response.data));
@@ -45,7 +52,7 @@ export default function UserPage() {
                     <Posts>
                         {posts.length > 0 ? posts.map(post => {
                                 return (
-                                    <PostComponent setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
+                                    <PostComponent followingArray={followingArray} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
                                 )
                             })
                             : <>There are no posts yet</>}

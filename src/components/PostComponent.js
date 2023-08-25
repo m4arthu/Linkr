@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom"
 import Modal from 'react-modal';
 import { RotatingLines } from "react-loader-spinner"
 import LikeButton from "./LikeButton";
+import {AiOutlineComment} from "react-icons/ai";
+import {FiSend} from "react-icons/fi"
+import CommentComponent from "./CommentComponent";
 
 export default function PostComponent(props) {
     const [editor, setEditor] = useState(false)
@@ -13,11 +16,27 @@ export default function PostComponent(props) {
     const [meta, setMeta] = useState({})
     const [loading, setLoading] = useState(false)
     const [disabled, setDisabled] = useState(false)
+    const [commentsArray, setCommentsArray] = useState([])
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
-    const { id } = JSON.parse(localStorage.getItem('userData'))
+    const { id, picture } = JSON.parse(localStorage.getItem('userData'))
     const reference = useRef()
     const [isOpen, setIsOpen] = useState(false)
+    const [commentsOpened, setCommentsOpened] = useState(false)
+    const [commentText, setCommentText] = useState('')
+    const [refresh, setRefresh] = useState(false)
+
+    
+
+    useEffect(() => {
+        setRefresh(false)
+        axios.get(`${process.env.REACT_APP_API_URL}/comment/post/${props.id}`, {headers: {Authorization: `Bearer ${token}`}})
+        .then(res => {
+            setCommentsArray(res.data)
+        })
+        .catch(console.log)
+    
+    }, [editor, commentsOpened, refresh])
 
     useEffect(() => {
         reference.current?.focus()
@@ -35,13 +54,21 @@ export default function PostComponent(props) {
             })
     }, [])
 
-
+    function sendComment(e=''){
+        if(e) {e.preventDefault()}
+        axios.post(`${process.env.REACT_APP_API_URL}/comment/post/${props.id}`, {comment: commentText}, {headers: {Authorization: `Bearer ${token}`}})
+        .then(res => {
+            console.log(res.data)
+            setCommentText('')
+            setRefresh(true)
+        })
+        .catch(console.log)
+    }
     function resetFunction() {
         document.getElementById(`edit${props.id}`).reset()
         setEditor(false)
     }
-
-    function handleEnter(e) {
+    function sendPostEditor(e) {
         setDisabled(true)
         e.preventDefault()
         // console.log({ newPost, trends: hashArrayPub })
@@ -63,7 +90,6 @@ export default function PostComponent(props) {
     function openEditor() {
         setEditor(true);
     }
-
     function handleText(x){
         setNewPost(x)
         const hashArray =[]
@@ -110,6 +136,7 @@ export default function PostComponent(props) {
     }
 
     return (
+        <>
         <PostContainer data-test="post">
             <Modal className='Modal' isOpen={isOpen} >
                 {loading ?
@@ -139,12 +166,17 @@ export default function PostComponent(props) {
                     <img onClick={() => navigate(`/user/${props.userId}`)} src={props.picture} alt="" />
                 </Imagem>
                 <LikeButton post={props} idLog={id} />
+
+                <CommentBtnContainer commentsOpened={commentsOpened} onClick={() => commentsOpened ? setCommentsOpened(false) : setCommentsOpened(true)}>
+                    <AiOutlineComment size='21px'/>
+                    <p>{commentsArray.length} {commentsArray.length === 1 ? 'comment' :'comments'}</p>
+                </CommentBtnContainer>
             </div>
             <div className="esquerda">
                 <h2 data-test="username" onClick={() => navigate(`/user/${props.userId}`)}>{props.username}</h2>
                 {editor ?
                     (<SCform id={`edit${props.id}`}>
-                        <SCinput data-test='edit-input' ref={reference} disabled={disabled} defaultValue={props.post} onKeyDown={e => (e.keyCode === 13 && !e.shiftKey ? handleEnter(e) : (e.keyCode === 27 ? resetFunction() : ''))} onChange={e =>  handleText(e.target.value)} />
+                        <SCinput data-test='edit-input' ref={reference} disabled={disabled} defaultValue={props.post} onKeyDown={e => (e.keyCode === 13 && !e.shiftKey ? sendPostEditor(e) : (e.keyCode === 27 ? resetFunction() : ''))} onChange={e =>  handleText(e.target.value)} />
                     </SCform>) : (<h3 data-test="description" >{props.post}</h3>)}
 
 
@@ -171,10 +203,109 @@ export default function PostComponent(props) {
                     </OwnerOptions> : ''
                 }
             </div>
-
         </PostContainer>
+        {commentsOpened ? 
+            <CommentsWindow >
+                <CommentsContainer>
+                    {commentsArray ? 
+                    commentsArray.map(x => {
+                        return <CommentComponent followingArray={props.followingArray} picture={x.picture} username={x.username} id={x.id} userId={x.userId} comment={x.comment} owner ={x.owner} />
+                    })
+                    :
+                    <></>}
+                </CommentsContainer>
+                <form onSubmit={e => sendComment(e)}>
+                    <CommentImagem>
+                        <img src={picture} />
+                    </CommentImagem>
+                    <input 
+                    type='text'
+                    placeholder="write a comment..."
+                    onChange={x => setCommentText(x.target.value)}
+                    value={commentText}/>
+                    <FiSend onClick={() => sendComment()} className='icon' size='20px'/>
+                </form>
+            </CommentsWindow>
+            :
+            <></>
+        }
+        </>
     )
 }
+const CommentsContainer = styled.div`
+    margin-top: 30px;
+    height: 230px;
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+`
+
+const CommentsWindow=styled.div`
+    width: 611px;
+    min-height: 330px;
+    background-color: #1E1E1E;
+    bottom: -300px;
+    left: 0;
+    z-index: 0;
+    margin-top: -30px;
+    border-radius: 16px;
+    form{
+        width: 100%;
+        height: 40px;
+        margin-top: 14px;
+        position: relative;
+    
+        input{
+            width: 510px;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            right: 23px;
+            color: #ACACAC;
+            background-color:#252525;
+            padding-left: 20px;
+            padding-right: 50px;
+            border-radius: 8px;
+            border: 0;
+            &::placeholder{
+                font-family: Lato;
+                font-size: 14px;
+                font-style: italic;
+                font-weight: 400;
+                line-height: normal;
+                letter-spacing: 0.7px;
+
+            }
+        }
+        .icon{
+            position: absolute;
+            top: 11px;
+            right: 39px;
+            &:hover{
+                cursor: pointer;
+            }
+        }
+        
+    }
+
+`
+
+const CommentBtnContainer = styled.div`
+    min-width: 120%;
+    height: 35px;
+    background-color: ${x => x.commentsOpened ? '#252525' : ''};
+    border-radius: 10px;
+    color: #FFF;
+    text-align: center;
+    font-family: Lato;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    &:hover{
+        cursor: pointer;
+    }
+`
 const SCform = styled.form``
 const SCinput = styled.textarea`
     width: 503px;
@@ -233,6 +364,25 @@ const IconEdit = styled.div`
     }
 `
 
+const CommentImagem = styled.div`
+    box-sizing: border-box;
+    height:39px;
+    width:39px;
+    min-width: 39px;
+    overflow: hidden;
+    border-radius:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 25px;
+    img{    
+        height:100%;
+        &:hover{
+        cursor: pointer;
+        }
+    }
+    `
 const Imagem = styled.div`
     box-sizing: border-box;
     height:50px;
@@ -251,7 +401,6 @@ const Imagem = styled.div`
     }
     `
 
-
 const PostContainer = styled.li`
     font-family: 'Lato', sans-serif;
     background-color: #171717;
@@ -262,6 +411,7 @@ const PostContainer = styled.li`
     display: flex;
     gap: 20px;
     position:relative;
+    z-index: 2;
     img{
          max-width:153px;
          border-radius: 0 12px 12px 0;

@@ -43,7 +43,7 @@ export default function NavBar({click, setClick}) {
             .then(res => {
                 localStorage.removeItem('userData');
                 localStorage.removeItem('token');
-                navigate('/');
+                window.location.reload();
             })
             .catch(err => alert(err.response.data));
     }
@@ -257,11 +257,16 @@ const DivBuscas = styled.div`
     border-bottom-right-radius: 8px;
     width: 563px;
     position: absolute;
+    left: calc(50% - 274px);
     top: 40px;
     padding: 20px;
     color: #515151;
     font-family: 'lato';
     font-size: 19px;
+    @media (max-width: 770px) {
+        width: 100%;
+        left: 0;        
+    }
     span{
         color: #C5C5C5;
         margin: none;

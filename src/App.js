@@ -9,7 +9,8 @@ import UserPage from "./pages/UserPage.js";
 import { Navigate } from "react-router-dom";
 import { useState } from "react";
 function App() {
-   const  isLoged = () => {
+  
+  const  isLoged = () => {
     let token = localStorage.getItem("token")
     if(token){
       axios.defaults.headers.common["Authorization"] = token

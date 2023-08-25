@@ -18,8 +18,15 @@ export default function TimelinePage({ click, setClick }) {
     const [hashArrayPub, setHashArrayPub] = useState([])
     const token = localStorage.getItem('token');
     const [update, setUpdate] = useState(0);
-
+    const [followingArray, setFollowingArray] = useState([])
+    
     useEffect(() => {
+        axios.get(`${process.env.REACT_APP_API_URL}/followers`, {headers: {Authorization: `Bearer ${token}`}})
+        .then(res =>{
+            setFollowingArray(res.data)
+        })
+        .catch(err => console.log(err))
+
         axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
         .then(res => setTrends(res.data))
         .catch(err => console.log(err))
@@ -148,7 +155,7 @@ export default function TimelinePage({ click, setClick }) {
                                 :
                                 posts.map(post => {
                                     return (
-                                        <PostComponent key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
+                                        <PostComponent followingArray={followingArray} key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
                                     )
                                 })
                         }

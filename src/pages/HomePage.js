@@ -115,6 +115,7 @@ export default function TimelinePage({ click, setClick }) {
                 setUrl('')
                 setText('')
                 setRefresh(true)
+                setPage(0);
             })
             .catch((err) => {
                 setClicked(false);

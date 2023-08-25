@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import { RotatingLines } from "react-loader-spinner"
 import LikeButton from "./LikeButton";
 import {AiOutlineComment} from "react-icons/ai";
+import { BsRepeat } from "react-icons/bs";
 import {FiSend} from "react-icons/fi"
 import CommentComponent from "./CommentComponent";
 
@@ -23,6 +24,7 @@ export default function PostComponent(props) {
     const reference = useRef()
     const [isOpen, setIsOpen] = useState(false)
     const [commentsOpened, setCommentsOpened] = useState(false)
+    const [repostOpened, setRepostsOpened] = useState(false)
     const [commentText, setCommentText] = useState('')
     const [refresh, setRefresh] = useState(false)
 
@@ -171,6 +173,11 @@ export default function PostComponent(props) {
                     <AiOutlineComment size='21px'/>
                     <p>{commentsArray.length} {commentsArray.length === 1 ? 'comment' :'comments'}</p>
                 </CommentBtnContainer>
+
+                <RepostBtnContainer repostOpened={repostOpened} onClick={() => repostOpened ? setRepostsOpened(false) : setRepostsOpened(true)}>
+                    <BsRepeat size='21px'/>
+                    <p>{props.num_reposts} {props.num_reposts === 1 ? 'repost' :'reposts'}</p>
+                </RepostBtnContainer>
             </div>
             <div className="esquerda">
                 <h2 data-test="username" onClick={() => navigate(`/user/${props.userId}`)}>{props.username}</h2>
@@ -294,6 +301,23 @@ const CommentBtnContainer = styled.div`
     min-width: 120%;
     height: 35px;
     background-color: ${x => x.commentsOpened ? '#252525' : ''};
+    border-radius: 10px;
+    color: #FFF;
+    text-align: center;
+    font-family: Lato;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    &:hover{
+        cursor: pointer;
+    }
+`
+
+const RepostBtnContainer = styled.div`
+    min-width: 120%;
+    height: 35px;
+    background-color: ${x => x.repostOpened ? '#252525' : ''};
     border-radius: 10px;
     color: #FFF;
     text-align: center;

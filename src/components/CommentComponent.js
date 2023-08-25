@@ -28,6 +28,7 @@ const CommentContainer = styled.div`
     border-bottom: 1px solid #353535;
     position: relative;
     h1{
+        width: 530px;
         color: #F3F3F3;
         font-family: Lato;
         font-size: 14px;
@@ -36,12 +37,15 @@ const CommentContainer = styled.div`
         line-height: normal;
         position: absolute;
         top: 15px;
-        left: 82px;
+        left: 65px;
+
         &:hover{
             cursor: pointer;
         }
     }
-    p{
+    p{  
+        
+        width: 530px;
         color: #ACACAC;
         font-family: Lato;
         font-size: 14px;

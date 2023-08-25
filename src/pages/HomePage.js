@@ -127,7 +127,20 @@ export default function TimelinePage({ click, setClick }) {
             )
         }
     }
-
+    console.log(posts);
+    // this.state = {
+    //     items: [], // Array de itens a serem exibidos
+    //     hasMoreItems: true, // Indica se há mais itens para carregar
+    //   };
+    // }
+  
+    // loadMoreItems = (page) => {
+    //     this.setState((prevState) => ({
+    //         items: [...prevState.items, ...newItems],
+    //         hasMoreItems: hasMore,
+    //       }));
+    // };
+  
     return (
         <>
             <NavBar click={click} setClick={setClick} />
@@ -149,16 +162,23 @@ export default function TimelinePage({ click, setClick }) {
                     </ShareMe>
                     <UpdateComponent />
                     <Posts>
-                        {load ? <>Loading</> :
-                            typeof (posts) === 'string' ?
-                                <h1 data-test="message" >{posts}</h1>
-                                :
-                                posts.map(post => {
-                                    return (
-                                        <PostComponent followingArray={followingArray} key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
-                                    )
-                                })
-                        }
+                        {/* <InfiniteScroll
+                            pageStart={0}
+                            loadMore={this.loadMoreItems}
+                            hasMore={this.state.hasMoreItems}
+                            loader={<div key={0}>Loading...</div>}
+                        > */}
+                            {load ? <>Loading</> :
+                                typeof (posts) === 'string' ?
+                                    <h1 data-test="message" >{posts}</h1>
+                                    :
+                                    /*this.state.*/posts.map(post => {
+                                        return (
+                                            <PostComponent followingArray={followingArray} key={post.id} setRefresh={setRefresh} userId={post.userId} username={post.username} picture={post.picture} articleUrl={post.articleUrl} trends={post.trends_array} likes={post.num_likes} post={post.post} num_likes={post.num_likes} id={post.id} />
+                                        )
+                                    })
+                            }
+                        {/* </InfiniteScroll> */}
                     </Posts>
 
                 </Timeline>

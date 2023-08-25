@@ -190,9 +190,9 @@ export default function PostComponent(props) {
                 <RepostBtnContainer repostOpened={repostOpened} onClick={() => {
                     setIsOpen(true)
                     setFrase(['Do you want to re-post this link?','Yes, share!'])
-                    repostOpened ? setRepostsOpened(false) : setRepostsOpened(true)}}>
+                    repostOpened ? setRepostsOpened(false) : setRepostsOpened(true)}} data-test="repost-btn">
                     <BsRepeat size='21px'/>
-                    <p>{props.num_reposts} {props.num_reposts === 1 ? 'repost' :'reposts'}</p>
+                    <p data-test="repost-counter">{props.num_reposts} {props.num_reposts === 1 ? 'repost' :'reposts'}</p>
                 </RepostBtnContainer>
             </div>
             <div className="esquerda">
